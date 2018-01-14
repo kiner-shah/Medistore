@@ -15,9 +15,9 @@ bool authenticate_customer() {
      * 4. If matched, return true, else return false
      */
     std::string name, password;
-    std::cout << "\nEnter your name: "; std::cin >> name;
+    std::cout << "\n\n\n\n\n\n\n\n\t\t\t\tEnter your name: "; std::cin >> name;
     std::cin.ignore();
-    std::cout << "Enter your password: "; 
+    std::cout << "\t\t\t\tEnter your password: "; 
     while(1) {
         char c;
         if((c = linux_getch(0)) == '\n') break;

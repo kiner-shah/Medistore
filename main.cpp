@@ -151,15 +151,15 @@ int main() {
             while(!authenticate_customer()) { 
                 count_customer_login_attempts++; 
                 if(count_customer_login_attempts >= 3) break;
-                cout << "\n\033[1;31mCredentials didn't match, try again!\033[0m" << endl;
+                cout << "\n\033[1;31m\t\t\t\tCredentials didn't match, try again!\033[0m" << endl;
             }
             if(count_customer_login_attempts >= 3) {
-                cout << "\n\033[1;31mSorry, you don't seem to have valid credentials try login after sometime\033[0m" << endl;
+                cout << "\n\033[1;31m\t\t\t\tSorry, you don't seem to have valid credentials try login after sometime\033[0m" << endl;
                 sleep(5);
                 exit(0);
             }
             else {
-                cout << "\n\033[1;32mSuccessfully logged in..Opening menu\033[0m" << endl;
+                cout << "\n\033[1;32m\t\t\t\tSuccessfully logged in..Opening menu\033[0m" << endl;
                 sleep(3);
                 clear_console();
             /*-------------------------------------------------------------------------------------*/
