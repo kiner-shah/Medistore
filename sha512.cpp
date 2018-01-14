@@ -184,7 +184,6 @@ string computeSHA512(string input_message) {
 #endif
         for(int j = 0; j < 80; j++) {
             if(j <= 15) {
-                printf("%llx\n", extracted_blocks[i][j]);
                 w[j] = extracted_blocks[i][j];
             }
             else {
@@ -212,9 +211,11 @@ string computeSHA512(string input_message) {
     }
 //    for(int i = 0; i < 8; i++) printf("%llx", hashes[i]); printf("\n");
     ostringstream o2;
+#ifdef __DEBUG_SHA512__    
     for(int i = 0; i < 8; i++) {
         o2 << std::hex << hashes[i];
     }
+#endif    
     return o2.str();
 }
 

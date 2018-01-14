@@ -19,7 +19,7 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <itemPath>customers_data.dat</itemPath>
+      <itemPath>customer_data.bin</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -64,7 +64,7 @@
       </item>
       <item path="customer.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="customers_data.dat" ex="false" tool="3" flavor2="0">
+      <item path="customer_data.bin" ex="false" tool="3" flavor2="0">
       </item>
       <item path="includes.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -123,7 +123,7 @@
       </item>
       <item path="customer.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="customers_data.dat" ex="false" tool="3" flavor2="0">
+      <item path="customer_data.bin" ex="false" tool="3" flavor2="0">
       </item>
       <item path="includes.h" ex="false" tool="3" flavor2="0">
       </item>

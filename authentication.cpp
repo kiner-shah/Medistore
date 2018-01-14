@@ -6,7 +6,7 @@
  */
 
 #include "authentication.h"
-#define __AUTH_DEBUG__
+//#define __AUTH_DEBUG__
 bool authenticate_customer() {
     /*
      * 1. Get customer credentials
