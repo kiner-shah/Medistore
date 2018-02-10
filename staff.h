@@ -9,8 +9,10 @@
 #define	STAFF_H
 
 #include <string>
+#include <fstream>
 
 class Staff {
+    friend class Admin;
     private:
         std::string staff_name;
         std::string password;

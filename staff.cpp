@@ -14,6 +14,11 @@ bool Staff::check_item_stock(std::string item_name) {
 }
 
 bool Staff::add_customer() {
+    /*
+     * 1. Search if customer is present already
+     * 2. If not, then add the new customer
+     */
+    
     return true;
 }
 

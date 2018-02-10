@@ -6,7 +6,6 @@
  */
 
 #include "store.h"
-#include <iostream>
 Bill Store::generate_bill() {
     Bill bill;
     return bill;
@@ -21,5 +20,49 @@ bool Store::modify_stock() {
 }
 
 bool Store::validate_customer() {
-    return true;
+    return authenticate_customer();
+}
+
+bool Store::validate_staff() {
+    return authenticate_staff();
+}
+
+bool Store::loadCustomerData() {
+    std::ifstream i;
+    i.open("customer_data.bin", std::ios::binary);
+    std::string val;
+    while(getline(i, val, ',')) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+}
+
+bool Store::loadStaffData() {
+    std::ifstream i;
+    i.open("staff_data.bin", std::ios::binary);
+    std::string val;
+    while(getline(i, val, ',')) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;    
+}
+
+bool Store::loadItemsData() {
+    std::ifstream i;
+    i.open("items_data.bin", std::ios::binary);
+    std::string val;
+    while(getline(i, val, ',')) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;    
+}
+
+bool Store::loadItemTransactionsData() {
+    std::ifstream i;
+    i.open("item_transactions_data.bin", std::ios::binary);
+    std::string val;
+    while(getline(i, val, ',')) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;    
 }

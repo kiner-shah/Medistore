@@ -19,11 +19,7 @@ using namespace std;
 
 /* Function to clear console window */
 void clear_console() {
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("tput reset");               // https://askubuntu.com/a/25079
-    #endif    
+    system("tput reset");               // https://askubuntu.com/a/25079   
 }
 /* Function to display spaces for centering message row wise 
  * @param row_center    the number of times newline have to be printed
@@ -131,7 +127,7 @@ int main() {
     clear_console();
     
     /* Starting Store by getting its instance */
-    static Store store_object = Store::get_instance_of_store();
+    static Store &store_object = Store::get_instance_of_store();
     int initial_menu_options = 1;
     int customer_menu_options = 1;
     int staff_menu_options = 1;
@@ -148,18 +144,21 @@ int main() {
             /*-------------------------------------------------------------------------------------*/
             /*################################## LOGIN LOGIC ######################################*/
             int count_customer_login_attempts = 0;
-            while(!authenticate_customer()) { 
+            while(!store_object.validate_customer()) { 
                 count_customer_login_attempts++; 
                 if(count_customer_login_attempts >= 3) break;
+                for(int i = 0; i < column_center - 18; i++) cout << " ";
                 cout << "\n\033[1;31m\t\t\t\tCredentials didn't match, try again!\033[0m" << endl;
             }
             if(count_customer_login_attempts >= 3) {
+                for(int i = 0; i < column_center - 36; i++) cout << " ";
                 cout << "\n\033[1;31m\t\t\t\tSorry, you don't seem to have valid credentials try login after sometime\033[0m" << endl;
                 sleep(5);
                 exit(0);
             }
-            else {
-                cout << "\n\033[1;32m\t\t\t\tSuccessfully logged in..Opening menu\033[0m" << endl;
+            else {  // Successfully logged in
+                for(int i = 0; i < column_center - 18; i++) cout << " ";
+                cout << "\n\033[1;32mSuccessfully logged in..Opening menu\033[0m" << endl;
                 sleep(3);
                 clear_console();
             /*-------------------------------------------------------------------------------------*/

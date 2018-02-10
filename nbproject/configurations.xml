@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>admin.h</itemPath>
       <itemPath>authentication.h</itemPath>
       <itemPath>bill.h</itemPath>
       <itemPath>customer.h</itemPath>
@@ -54,6 +55,8 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="admin.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="authentication.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="authentication.h" ex="false" tool="3" flavor2="0">
@@ -113,6 +116,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="admin.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="authentication.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="authentication.h" ex="false" tool="3" flavor2="0">

@@ -15,6 +15,7 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 bool authenticate_customer();
 bool authenticate_staff();
