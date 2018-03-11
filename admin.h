@@ -7,14 +7,26 @@
 
 #ifndef ADMIN_H
 #define	ADMIN_H
+
 #include <string>
-class Admin {
+#include "staff.h"
+
+class Admin : public Staff {
     private:
         std::string generatePassword();
     public:
-        bool addStaff(Staff newStaff);
-        bool removeStaff(Staff staff);
+        bool addStaff(Staff newStaff) {
+            static Store store_object = Store::get_instance_of_store();
+            Staff *staff = store_object.getStaff();
+            
+            return true;
+        }
+        bool removeStaff(Staff staff) {
+            static Store store_object = Store::get_instance_of_store();
+            Staff *staff = store_object.getStaff();
+            
+            return true;
+        }
 };
 
 #endif	/* ADMIN_H */
-

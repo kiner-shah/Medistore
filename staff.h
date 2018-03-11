@@ -12,7 +12,6 @@
 #include <fstream>
 
 class Staff {
-    friend class Admin;
     private:
         std::string staff_name;
         std::string password;

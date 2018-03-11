@@ -18,7 +18,7 @@
 #include <fstream>
 #include <string>
 
-class Store {
+class Store final {
     private:
         Customer *customers;
         Staff *staff;                             // defining a Singleton so that only one instance of store exists
@@ -36,12 +36,13 @@ class Store {
         Item *items;
         ItemTransaction *item_transactions;
     public:
-        virtual Bill generate_bill() final;
-        virtual void display_items() final;
-        virtual bool modify_stock() final;
-        virtual bool validate_customer() final;
-        virtual bool validate_staff() final;
-        
+        Bill generate_bill();
+        void display_items();
+        bool modify_stock();
+//        bool validate_customer();
+        bool validate_staff();
+        Staff *getStaff();
+        Staff *getCustomers();
         static Store& get_instance_of_store() {
             static Store instance;
             return instance;

@@ -12,6 +12,13 @@
         <group>
             <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/includes.h</file>
             <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/authentication.cpp</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/staff.h</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/customer.h</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/staff.cpp</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/store.h</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/admin.h</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/customer.cpp</file>
+            <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/store.cpp</file>
             <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/authentication.h</file>
             <file>file:/C:/Users/user/Documents/NetBeansProjects/Medistore/main.cpp</file>
         </group>

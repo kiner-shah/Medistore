@@ -19,9 +19,9 @@ bool Store::modify_stock() {
     return true;
 }
 
-bool Store::validate_customer() {
-    return authenticate_customer();
-}
+//bool Store::validate_customer() {
+//    return authenticate_customer();
+//}
 
 bool Store::validate_staff() {
     return authenticate_staff();

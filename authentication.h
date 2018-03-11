@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
-bool authenticate_customer();
+//bool authenticate_customer();
 bool authenticate_staff();
 std::string compute_hash(std::string);
 
