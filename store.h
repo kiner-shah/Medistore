@@ -18,23 +18,43 @@
 #include <fstream>
 #include <string>
 
-class Store final {
+class Store {
     private:
-        Customer *customers;
-        Staff *staff;                             // defining a Singleton so that only one instance of store exists
+        Customer **customers;
+        long totalCustomers;
+        Staff **staff;                             // defining a Singleton so that only one instance of store exists
+        long totalStaff;
         bool loadCustomerData();
         bool loadStaffData();
         bool loadItemsData();
         bool loadItemTransactionsData();
         Store() {                                 // private constructor for Singleton
-            customers = 0;
-            staff = 0;
-            items = 0;
-            item_transactions = 0;
+            customers = NULL;
+            totalCustomers = 0;
+            staff = NULL;
+            totalStaff = 0;
+            items = NULL;
+            totalItems = 0;
+            item_transactions = NULL;
+            totalItemTransactions = 0;
+            if(!loadCustomerData()) {
+                std::cerr << "ERROR: loadCustomerData(): FAILED" << std::endl;
+            }
+            if(!loadStaffData()) {
+                std::cerr << "ERROR: loadStaffData(): FAILED" << std::endl;
+            }
+            if(!loadItemsData()) {
+                std::cerr << "ERROR: loadItemsData(): FAILED" << std::endl;
+            }
+            if(!loadItemTransactionsData()) {
+                std::cerr << "ERROR: loadItemTransactionsData(): FAILED" << std::endl;
+            }
         }
     protected:
-        Item *items;
-        ItemTransaction *item_transactions;
+        Item **items;
+        long totalItems;
+        ItemTransaction **item_transactions;
+        long totalItemTransactions;
     public:
         Bill generate_bill();
         void display_items();

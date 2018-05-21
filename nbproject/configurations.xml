@@ -21,6 +21,7 @@
                    displayName="Resource Files"
                    projectFiles="true">
       <itemPath>customer_data.bin</itemPath>
+      <itemPath>staff_data.bin</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -89,6 +90,8 @@
       </item>
       <item path="staff.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="staff_data.bin" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="store.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="store.h" ex="false" tool="3" flavor2="0">
@@ -149,6 +152,8 @@
       <item path="staff.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="staff.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="staff_data.bin" ex="false" tool="3" flavor2="0">
       </item>
       <item path="store.cpp" ex="false" tool="1" flavor2="0">
       </item>

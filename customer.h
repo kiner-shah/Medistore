@@ -11,16 +11,18 @@
 #include "transaction.h"
 #include <string>
 
+typedef struct STRUCT_TRANSID_BILLNO {
+    int transactionID;
+    int billNo;
+} transIdBillNoPair;
+
 class Customer {
 private:
-    std::string cName;
-    std::string cSSN;
-    std::string cGender;
-    struct tm *cDOB;
-    std::string cAddress;
     float cBalance;
-    Transaction *transactions;
-    std::string cPassword;
+    transIdBillNoPair *trans_id_bill_no_pair;
+    std::string cAddress;
+    std::string cName;
+    std::string cGender;
     
 public:
     void purchaseItems();

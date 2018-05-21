@@ -71,6 +71,8 @@ bool authenticate_staff() {
     int no_of_spaces = column_center - 20;
     display_in_center_row(row_center);
     for(int i = 0; i < no_of_spaces; i++) std::cout<<" ";
+    std::cout << "\033[0;32mStaff Login\n\033[0m";
+    for(int i = 0; i < no_of_spaces; i++) std::cout<<" ";
     std::string name, password;
     std::cout << "Enter your name: "; std::cin >> name;
     std::cin.ignore();
@@ -79,9 +81,9 @@ bool authenticate_staff() {
     while(1) {
         char c;
         if((c = linux_getch(0)) == '\n') break;
-        if(c == '\b') {
+        if(c == 127 || c == 8) {
             if(password.length() > 0) {
-                //std::cout << "\b \b";
+                std::cout << "\b \b";
                 password.pop_back();
             }
         }
