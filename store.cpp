@@ -5,6 +5,8 @@
  * Created on 3 November, 2017, 9:20 PM
  */
 
+#include <sys/_default_fcntl.h>
+
 #include "store.h"
 // TODO
 Bill Store::generate_bill() {
@@ -39,7 +41,7 @@ bool Store::validate_staff() {
  * @return Boolean value indicating load success / failure
  */
 bool Store::loadCustomerData() {
-    std::ifstream i;
+    /*std::ifstream i;
     i.open("customer_data.bin", std::ios::binary | std::ios::in);
     while(true) {
         char *buf;
@@ -54,7 +56,9 @@ bool Store::loadCustomerData() {
         *customers = temp_customer;
         customers[totalCustomers - 1] = (Customer *) buf;
     }
-    i.close();
+    i.close();*/
+    int fd = open("customer_data.bin", O_CREAT | O_RDONLY);
+    if(fd  == -1) return false;
     return true;
 }
 
@@ -63,7 +67,7 @@ bool Store::loadCustomerData() {
  * @return Boolean value indicating load success / failure
  */
 bool Store::loadStaffData() {
-    std::ifstream i;
+    /*std::ifstream i;
     i.open("staff_data.bin", std::ios::binary | std::ios::in);
     while(true) {
         char *buf;
@@ -78,30 +82,36 @@ bool Store::loadStaffData() {
         *staff = temp_staff;
         staff[totalStaff - 1] = (Staff *) buf;
     }
-    i.close();   
+    i.close();*/
+    int fd = open("staff_data.bin", O_CREAT | O_RDONLY);
+    if(fd == -1) return false;
     return true;
 }
 
 // TODO
 bool Store::loadItemsData() {
-    std::ifstream i;
+    /*std::ifstream i;
     i.open("items_data.bin", std::ios::binary);
     std::string val;
     while(getline(i, val, ',')) {
         std::cout << val << " ";
     }
-    std::cout << std::endl;    
+    std::cout << std::endl;*/
+    int fd = open("items_data.bin", O_CREAT | O_RDONLY);
+    if(fd == -1) return false;
     return true;
 }
 
 // TODO
 bool Store::loadItemTransactionsData() {
-    std::ifstream i;
+    /*std::ifstream i;
     i.open("item_transactions_data.bin", std::ios::binary);
     std::string val;
     while(getline(i, val, ',')) {
         std::cout << val << " ";
     }
-    std::cout << std::endl;    
+    std::cout << std::endl;*/
+    int fd = open("item_transactions_data.bin", O_CREAT | O_RDONLY);
+    if(fd == -1) return false;
     return true;
 }
