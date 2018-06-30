@@ -135,7 +135,7 @@ int main() {
     clear_console();
     
     /* Starting Store by getting its instance */
-    static Store store_object = Store::get_instance_of_store();
+    static Store* store_object = Store::get_instance_of_store();
     int initial_menu_options = 1;
     int initial_menu_options_after_login = 1;
     int customer_menu_options = 1;
@@ -164,7 +164,7 @@ int main() {
             /*################################## LOGIN LOGIC ######################################*/
             if(staff_session_start == false) {
                 int count_staff_login_attempts = 0;
-                while(!store_object.validate_staff()) {
+                while(!store_object->validate_staff()) {
                     count_staff_login_attempts++;
                     if(count_staff_login_attempts >= 3) break;
                     cout << "\n";
@@ -207,7 +207,7 @@ int main() {
             // TODO: Add code here
             if(staff_session_start == false) {
                 int count_staff_login_attempts = 0;
-                while(!store_object.validate_staff()) {
+                while(!store_object->validate_staff()) {
                     count_staff_login_attempts++;
                     if(count_staff_login_attempts >= 3) break;
                     cout << "\n";

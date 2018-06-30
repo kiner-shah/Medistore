@@ -1,6 +1,6 @@
 build/Debug/Cygwin-Windows/store.o: store.cpp store.h item.h \
  item_transaction.h bill.h staff.h customer.h transaction.h \
- authentication.h linux_getch.h sha512.h
+ authentication.h linux_getch.h sha512.h file_mngr.h
 
 store.h:
 
@@ -21,3 +21,5 @@ authentication.h:
 linux_getch.h:
 
 sha512.h:
+
+file_mngr.h:

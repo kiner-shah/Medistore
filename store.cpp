@@ -8,6 +8,8 @@
 #include <sys/_default_fcntl.h>
 
 #include "store.h"
+
+Store* Store::instance = NULL;
 // TODO
 Bill Store::generate_bill() {
     Bill bill;
@@ -41,24 +43,8 @@ bool Store::validate_staff() {
  * @return Boolean value indicating load success / failure
  */
 bool Store::loadCustomerData() {
-    /*std::ifstream i;
-    i.open("customer_data.bin", std::ios::binary | std::ios::in);
-    while(true) {
-        char *buf;
-        i.read(buf, sizeof(Customer));
-        if(i.fail() || i.bad()) return false; 
-        else if(i.eof()) break;
-        Customer *temp_customer = (Customer *) realloc(*customers, sizeof(Customer) * (++totalCustomers));
-        if(temp_customer == NULL) {
-            std::cerr << "ERROR: loadCustomerData(): Cannot allocate more memory" << std::endl;
-            return false;
-        }
-        *customers = temp_customer;
-        customers[totalCustomers - 1] = (Customer *) buf;
-    }
-    i.close();*/
-    int fd = open("customer_data.bin", O_CREAT | O_RDONLY);
-    if(fd  == -1) return false;
+    customer_data = new FileMngr("customer_data.bin", READ_FILE);
+    if(customer_data->file_des == -1) return false;
     return true;
 }
 
@@ -67,51 +53,27 @@ bool Store::loadCustomerData() {
  * @return Boolean value indicating load success / failure
  */
 bool Store::loadStaffData() {
-    /*std::ifstream i;
-    i.open("staff_data.bin", std::ios::binary | std::ios::in);
-    while(true) {
-        char *buf;
-        i.read(buf, sizeof(Staff));
-        if(i.fail() || i.bad()) return false; 
-        else if(i.eof()) break;
-        Staff *temp_staff = (Staff *) realloc(*staff, sizeof(Staff) * (++totalStaff));
-        if(temp_staff == NULL) {
-            std::cerr << "ERROR: loadStaffData(): Cannot allocate more memory" << std::endl;
-            return false;
-        }
-        *staff = temp_staff;
-        staff[totalStaff - 1] = (Staff *) buf;
-    }
-    i.close();*/
-    int fd = open("staff_data.bin", O_CREAT | O_RDONLY);
-    if(fd == -1) return false;
+    staff_data = new FileMngr("staff_data.bin", READ_FILE);
+    if(staff_data->file_des == -1) return false;
     return true;
 }
 
-// TODO
+/**
+ * Function that loads items data
+ * @return Boolean value indicating load success / failure
+ */
 bool Store::loadItemsData() {
-    /*std::ifstream i;
-    i.open("items_data.bin", std::ios::binary);
-    std::string val;
-    while(getline(i, val, ',')) {
-        std::cout << val << " ";
-    }
-    std::cout << std::endl;*/
-    int fd = open("items_data.bin", O_CREAT | O_RDONLY);
-    if(fd == -1) return false;
+    items_data = new FileMngr("items_data.bin", READ_FILE);
+    if(items_data->file_des == -1) return false;
     return true;
 }
 
-// TODO
+/**
+ * Function that loads item transactions data
+ * @return Boolean value indicating load success / failure
+ */
 bool Store::loadItemTransactionsData() {
-    /*std::ifstream i;
-    i.open("item_transactions_data.bin", std::ios::binary);
-    std::string val;
-    while(getline(i, val, ',')) {
-        std::cout << val << " ";
-    }
-    std::cout << std::endl;*/
-    int fd = open("item_transactions_data.bin", O_CREAT | O_RDONLY);
-    if(fd == -1) return false;
+    item_trans_data = new FileMngr("item_transactions_data.bin", READ_FILE);
+    if(item_trans_data->file_des == -1) return false;
     return true;
 }

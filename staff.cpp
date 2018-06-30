@@ -9,7 +9,7 @@
 #include "store.h"
 /* Global variables */
 bool Staff::check_item_stock(std::string item_name) {
-    static Store store_instance = Store::get_instance_of_store();
+    static Store* store_instance = Store::get_instance_of_store();
     return true;
 }
 

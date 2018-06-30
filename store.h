@@ -14,6 +14,7 @@
 #include "staff.h"
 #include "customer.h"
 #include "authentication.h"
+#include "file_mngr.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -24,10 +25,19 @@ class Store {
         long totalCustomers;
         Staff **staff;                             // defining a Singleton so that only one instance of store exists
         long totalStaff;
+        FileMngr *customer_data;
+        FileMngr *staff_data;
+        FileMngr *items_data;
+        FileMngr *item_trans_data;
         bool loadCustomerData();
         bool loadStaffData();
         bool loadItemsData();
         bool loadItemTransactionsData();
+        bool unloadCustomerData();
+        bool unloadStaffData();
+        bool unloadItemsData();
+        bool unloadItemTransactionsData();
+        static Store* instance;
         Store() {                                 // private constructor for Singleton
             customers = NULL;
             totalCustomers = 0;
@@ -55,6 +65,7 @@ class Store {
         long totalItems;
         ItemTransaction **item_transactions;
         long totalItemTransactions;
+        
     public:
         Bill generate_bill();
         void display_items();
@@ -63,10 +74,30 @@ class Store {
         bool validate_staff();
         Staff *getStaff();
         Staff *getCustomers();
-        static Store& get_instance_of_store() {
-            static Store instance;
+//        static Store& get_instance_of_store() {
+//            static Store instance;
+//            return instance;
+//        }
+        static Store* get_instance_of_store() {
+            if(instance == NULL) {
+                instance = new Store();
+            }
             return instance;
         }
+//        ~Store() {
+//            if(!unloadCustomerData()) {
+//                std::cerr << "ERROR: unloadCustomerData(): FAILED" << std::endl;
+//            }
+//            if(!unloadStaffData()) {
+//                std::cerr << "ERROR: unloadStaffData(): FAILED" << std::endl;
+//            }
+//            if(!unloadItemsData()) {
+//                std::cerr << "ERROR: unloadItemsData(): FAILED" << std::endl;
+//            }
+//            if(!unloadItemTransactionsData()) {
+//                std::cerr << "ERROR: unloadItemTransactionsData(): FAILED" << std::endl;
+//            }
+//        }
 };
 
 #endif	/* STORE_H */
