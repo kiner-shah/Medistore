@@ -209,13 +209,13 @@ string computeSHA512(string input_message) {
         hashes[6] = (hashes[6] + g);
         hashes[7] = (hashes[7] + h);
     }
-//    for(int i = 0; i < 8; i++) printf("%llx", hashes[i]); printf("\n");
-    ostringstream o2;
-#ifdef __DEBUG_SHA512__    
+#ifdef __DEBUG_SHA512__
+    for(int i = 0; i < 8; i++) printf("%llx ", hashes[i]); printf("\n");
+#endif
+    ostringstream o2; 
     for(int i = 0; i < 8; i++) {
         o2 << std::hex << hashes[i];
     }
-#endif    
     return o2.str();
 }
 

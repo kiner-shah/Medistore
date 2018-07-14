@@ -13,21 +13,26 @@
 
 class Staff {
     private:
+        int staff_age;
         std::string staff_name;
-        std::string password;
         std::string staff_id;
+        std::string staff_gender;
+        std::string staff_address;
+        std::string staff_password;
     public:
+        Staff(std::string name, std::string id, std::string gender, std::string address, int age, std::string password) : staff_age(age), 
+                staff_name(name), staff_id(id), staff_gender(gender), staff_address(address), staff_password(password) {
+        }
+        std::string getName() { return staff_name; }
+        std::string getGender() { return staff_gender; }
+        std::string getAddress() { return staff_address; }
+        std::string getID() { return staff_id; }
+        int getAge() { return staff_age; }
+        std::string getPasswordHash() { return staff_password; }
+        // Get items and item transactions from store for below functions
         bool check_item_stock(std::string item_name);
-        bool add_customer();
         bool modify_item(int mode);
         void check_item_transactions();
-        bool login();
-        Staff() {
-            staff_name = "";
-            password = "";
-            staff_id = "";
-            
-        }
 };
 
 #endif	/* STAFF_H */

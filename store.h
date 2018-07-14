@@ -18,13 +18,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 class Store {
     private:
-        Customer **customers;
-        long totalCustomers;
-        Staff **staff;                             // defining a Singleton so that only one instance of store exists
-        long totalStaff;
+        std::vector<Customer*> customers;
+        unsigned int totalCustomers; 
+        std::vector<Staff*> staff; // defining a Singleton so that only one instance of store exists
+        unsigned int totalStaff;
         FileMngr *customer_data;
         FileMngr *staff_data;
         FileMngr *items_data;
@@ -39,13 +40,13 @@ class Store {
         bool unloadItemTransactionsData();
         static Store* instance;
         Store() {                                 // private constructor for Singleton
-            customers = NULL;
+//            customers = NULL;
             totalCustomers = 0;
-            staff = NULL;
+//            staff = NULL;
             totalStaff = 0;
-            items = NULL;
+//            items = NULL;
             totalItems = 0;
-            item_transactions = NULL;
+//            item_transactions = NULL;
             totalItemTransactions = 0;
             if(!loadCustomerData()) {
                 std::cerr << "ERROR: loadCustomerData(): FAILED" << std::endl;
@@ -61,9 +62,9 @@ class Store {
             }
         }
     protected:
-        Item **items;
+        std::vector<Item*> items;
         long totalItems;
-        ItemTransaction **item_transactions;
+        std::vector<ItemTransaction*> item_transactions;
         long totalItemTransactions;
         
     public:
@@ -71,10 +72,16 @@ class Store {
         void display_items();
         bool modify_stock();
 //        bool validate_customer();
-        bool validate_staff();
-        Staff *getStaff();
-        Staff *getCustomers();
-//        static Store& get_instance_of_store() {
+        int validate_staff();
+        std::vector<Staff*> getStaff() { return staff; } 
+        unsigned int getTotalStaff() { return totalStaff; }
+        std::vector<Customer*> getCustomers() { return customers; }
+        unsigned int getTotalCustomers() { return totalCustomers; }
+        std::vector<Item*> getItems() { return items; }
+        unsigned int getTotalItems() { return totalItems; }
+        std::vector<ItemTransaction*> getItemTransactions() { return item_transactions; }
+        unsigned int getTotalItemTransactions() { return totalItemTransactions; }
+//        static Store& get_instance_of_store() {       // Another alternative for Singleton
 //            static Store instance;
 //            return instance;
 //        }
@@ -84,20 +91,20 @@ class Store {
             }
             return instance;
         }
-//        ~Store() {
-//            if(!unloadCustomerData()) {
-//                std::cerr << "ERROR: unloadCustomerData(): FAILED" << std::endl;
-//            }
-//            if(!unloadStaffData()) {
-//                std::cerr << "ERROR: unloadStaffData(): FAILED" << std::endl;
-//            }
-//            if(!unloadItemsData()) {
-//                std::cerr << "ERROR: unloadItemsData(): FAILED" << std::endl;
-//            }
+        ~Store() {
+            if(!unloadCustomerData()) {
+                std::cerr << "ERROR: unloadCustomerData(): FAILED" << std::endl;
+            }
+            if(!unloadStaffData()) {
+                std::cerr << "ERROR: unloadStaffData(): FAILED" << std::endl;
+            }
+            if(!unloadItemsData()) {
+                std::cerr << "ERROR: unloadItemsData(): FAILED" << std::endl;
+            }
 //            if(!unloadItemTransactionsData()) {
 //                std::cerr << "ERROR: unloadItemTransactionsData(): FAILED" << std::endl;
 //            }
-//        }
+        }
 };
 
 #endif	/* STORE_H */

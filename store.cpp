@@ -8,7 +8,10 @@
 #include <sys/_default_fcntl.h>
 
 #include "store.h"
-
+#include <algorithm>
+#include <sstream>
+#include <vector>
+//#include <cassert>
 Store* Store::instance = NULL;
 // TODO
 Bill Store::generate_bill() {
@@ -34,7 +37,7 @@ bool Store::modify_stock() {
  * Function which validates staff member
  * @return Validation result
  */
-bool Store::validate_staff() {
+int Store::validate_staff() {
     return authenticate_staff();
 }
 
@@ -45,6 +48,89 @@ bool Store::validate_staff() {
 bool Store::loadCustomerData() {
     customer_data = new FileMngr("customer_data.bin", READ_FILE);
     if(customer_data->file_des == -1) return false;
+    // File format: CustomerName,CustomerGender,CustomerAddress,TransIdCount,Trans1,Trans2,..,TransN,Bill1,Bill2,..,BillN
+    ssize_t bytes = 0;
+    int total_bytes = -1;
+    unsigned int BUF_SIZE = 128;
+    char buf[BUF_SIZE], ch;
+    std::string line = "";
+    memset(buf, '\0', sizeof(buf));
+    while(true) {
+        bytes = read(customer_data->file_des, &ch, 1);
+        if(bytes == -1) {
+            if(errno == EINTR) continue;
+            else return false;
+        }
+        else if(bytes == 0) {
+            if(total_bytes == -1) return true;
+            else {
+                // Create structure and break
+                line.append(buf);
+                std::istringstream iss(line);
+                std::string token;
+                std::vector<std::string> tokens;
+                while(getline(iss, token, ',')) {
+                    tokens.push_back(token);
+                }
+                std::cout << "Tokens: " << tokens.size() << std::endl;
+                if(tokens.size() > 0) {
+                    tokens[2] = tokens[2].substr(0, tokens[2].find_last_not_of("\n"));
+                    Customer *temp = new Customer(tokens[0], tokens[1], tokens[2]);
+                    customers.push_back(temp);
+//                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getGender() << std::endl;
+                    totalCustomers++;
+                }
+            }
+        }
+        else {
+            total_bytes += bytes;
+            if(total_bytes >= BUF_SIZE - 2) {
+                line.append(buf);
+                total_bytes = 0;
+                memset(buf, '\0', BUF_SIZE);
+                buf[total_bytes] = ch;
+            }
+            else buf[total_bytes] = ch;
+            if(ch == '\n') {
+                // Create structure
+                line.append(buf);
+                std::istringstream iss(line);
+                std::string token;
+                std::vector<std::string> tokens;
+                while(getline(iss, token, ',')) {
+                    tokens.push_back(token);
+                }
+//                std::cout << "Tokens: " << tokens.size() << std::endl;
+                line = ""; total_bytes = -1;
+                memset(buf, '\0', BUF_SIZE);
+                if(tokens.size() > 0) {
+                    tokens[2] = tokens[2].substr(0, tokens[2].find_last_not_of("\n"));
+                    Customer *temp = new Customer(tokens[0], tokens[1], tokens[2]);
+                    customers.push_back(temp);
+//                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getGender() << std::endl;
+                    totalCustomers++;
+                }
+            }
+        }
+//        std::cout << "Total bytes: " << total_bytes << " Buf: " << buf << std::endl;
+    }
+//    std::cout << "Total customers = " << totalCustomers << std::endl;
+    return true;
+}
+/**
+ * Function that unloads customer data
+ * @return unload success / failure
+ */
+bool Store::unloadCustomerData() {
+    for(unsigned int i = 0; i < totalCustomers; i++) {
+        delete customers[i];
+        customers[i] = NULL;
+//        assert(customers[i] == NULL);
+    }
+    customers.clear();
+//    assert(customers.empty());
+    totalCustomers = 0;
+    customer_data->closeFile();
     return true;
 }
 
@@ -55,9 +141,99 @@ bool Store::loadCustomerData() {
 bool Store::loadStaffData() {
     staff_data = new FileMngr("staff_data.bin", READ_FILE);
     if(staff_data->file_des == -1) return false;
+    // File format: StaffID,StaffName,StaffGender,StaffAddress,StaffAge,StaffPassword
+    ssize_t bytes = 0;
+    int total_bytes = -1;
+    unsigned int BUF_SIZE = 128;
+    char buf[BUF_SIZE], ch;
+    std::string line = "";
+    memset(buf, '\0', sizeof(buf));
+    while(true) {
+        bytes = read(staff_data->file_des, &ch, 1);
+        if(bytes == -1) {
+            if(errno == EINTR) continue;
+            else return false;
+        }
+        else if(bytes == 0) {
+            if(total_bytes == -1) return true;
+            else {
+                // Create structure and break
+                line.append(buf);
+                std::istringstream iss(line);
+                std::string token;
+                std::vector<std::string> tokens;
+                while(getline(iss, token, ',')) {
+                    tokens.push_back(token);
+                }
+                std::cout << "Tokens: " << tokens.size() << std::endl;
+                if(tokens.size() > 0) {
+                    int staff_age;
+                    std::stringstream ss;
+                    ss << tokens[4];
+                    ss >> staff_age;
+                    tokens[5] = tokens[5].substr(0, tokens[5].find_last_not_of("\n"));
+                    Staff *temp = new Staff(tokens[1], tokens[0], tokens[2], tokens[3], staff_age, tokens[5]);
+                    staff.push_back(temp);
+//                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getGender() << std::endl;
+                    totalStaff++;
+                }
+            }
+        }
+        else {
+            total_bytes += bytes;
+            if(total_bytes >= BUF_SIZE - 2) {
+                line.append(buf);
+                total_bytes = 0;
+                memset(buf, '\0', BUF_SIZE);
+                buf[total_bytes] = ch;
+            }
+            else buf[total_bytes] = ch;
+            if(ch == '\n') {
+                // Create structure
+                line.append(buf);
+                std::istringstream iss(line);
+                std::string token;
+                std::vector<std::string> tokens;
+                while(getline(iss, token, ',')) {
+                    tokens.push_back(token);
+                }
+//                std::cout << "Tokens: " << tokens.size() << std::endl;
+                line = ""; total_bytes = -1;
+                memset(buf, '\0', BUF_SIZE);
+                if(tokens.size() > 0) {
+                    int staff_age;
+                    std::stringstream ss;
+                    ss << tokens[4];
+                    ss >> staff_age;
+                    tokens[5] = tokens[5].substr(0, tokens[5].find_last_not_of("\n"));
+                    Staff *temp = new Staff(tokens[1], tokens[0], tokens[2], tokens[3], staff_age, tokens[5]);
+                    staff.push_back(temp);
+//                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getPasswordHash() << std::endl;
+                    totalStaff++;
+                }
+            }
+        }
+//        std::cout << "Total bytes: " << total_bytes << " Buf: " << buf << " " << strlen(buf) << std::endl;
+    }
+//    std::cout << "Total staff = " << totalStaff << std::endl;
     return true;
 }
-
+/**
+ * Function that unloads staff data
+ * @return unload success / failure
+ */
+bool Store::unloadStaffData() {
+    for(unsigned int i = 0; i < totalStaff; i++) {
+        delete staff[i];
+        staff[i] = NULL;
+//        assert(staff[i] == NULL);
+    }
+    staff.clear();
+//    assert(staff.empty());
+    totalStaff = 0;
+    staff_data->closeFile();
+    return true;
+}
 /**
  * Function that loads items data
  * @return Boolean value indicating load success / failure
@@ -65,9 +241,90 @@ bool Store::loadStaffData() {
 bool Store::loadItemsData() {
     items_data = new FileMngr("items_data.bin", READ_FILE);
     if(items_data->file_des == -1) return false;
+    // File format: ItemID,ItemName,ItemStock,ItemPrice,ItemExpiry(yyyy-mm-dd)
+    ssize_t bytes = 0;
+    int total_bytes = -1;
+    unsigned int BUF_SIZE = 128;
+    char buf[BUF_SIZE], ch;
+    std::string line = "";
+    memset(buf, '\0', sizeof(buf));
+    while(true) {
+        bytes = read(items_data->file_des, &ch, 1);
+        if(bytes == -1) {
+            if(errno == EINTR) continue;
+            else return false;
+        }
+        else if(bytes == 0) {
+            if(total_bytes == -1) return true;
+            else {
+                // Create structure and break
+                line.append(buf);
+                std::istringstream iss(line);
+                std::string token;
+                std::vector<std::string> tokens;
+                while(getline(iss, token, ',')) {
+                    tokens.push_back(token);
+                }
+                std::cout << "Tokens: " << tokens.size() << std::endl;
+                if(tokens.size() > 0) {
+                    tokens[4] = tokens[4].substr(0, tokens[4].find_last_not_of("\n"));
+                    Item *temp = new Item(tokens[0], tokens[1], stoi(tokens[2]), stof(tokens[3]), tokens[4]);
+                    items.push_back(temp);
+//                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getGender() << std::endl;
+                    totalItems++;
+                }
+            }
+        }
+        else {
+            total_bytes += bytes;
+            if(total_bytes >= BUF_SIZE - 2) {
+                line.append(buf);
+                total_bytes = 0;
+                memset(buf, '\0', BUF_SIZE);
+                buf[total_bytes] = ch;
+            }
+            else buf[total_bytes] = ch;
+            if(ch == '\n') {
+                // Create structure
+                line.append(buf);
+                std::istringstream iss(line);
+                std::string token;
+                std::vector<std::string> tokens;
+                while(getline(iss, token, ',')) {
+                    tokens.push_back(token);
+                }
+//                std::cout << "Tokens: " << tokens.size() << std::endl;
+                line = ""; total_bytes = -1;
+                memset(buf, '\0', BUF_SIZE);
+                if(tokens.size() > 0) {
+                    tokens[4] = tokens[4].substr(0, tokens[4].find_last_not_of("\n"));
+                    Item *temp = new Item(tokens[0], tokens[1], stoi(tokens[2]), stof(tokens[3]), tokens[4]);
+                    items.push_back(temp);
+//                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getGender() << std::endl;
+                    totalItems++;
+                }
+            }
+        }
+//        std::cout << "Total bytes: " << total_bytes << " Buf: " << buf << std::endl;
+    }
     return true;
 }
-
+/**
+ * Function that unloads items data
+ * @return unload success / failure
+ */
+bool Store::unloadItemsData() {
+    for(unsigned int i = 0; i < totalItems; i++) {
+        delete items[i];
+        items[i] = NULL;
+//        assert(staff[i] == NULL);
+    }
+    items.clear();
+//    assert(staff.empty());
+    totalItems = 0;
+    items_data->closeFile();
+    return true;
+}
 /**
  * Function that loads item transactions data
  * @return Boolean value indicating load success / failure
@@ -75,5 +332,71 @@ bool Store::loadItemsData() {
 bool Store::loadItemTransactionsData() {
     item_trans_data = new FileMngr("item_transactions_data.bin", READ_FILE);
     if(item_trans_data->file_des == -1) return false;
+    // File format: ItemTransID,ItemTimeStamp,ItemChangesCount,Change1,Change2,..,ChangeN
+    ssize_t bytes = 0;
+    int total_bytes = -1;
+    unsigned int BUF_SIZE = 128;
+    char buf[BUF_SIZE], ch;
+    std::string line = "";
+    memset(buf, '\0', sizeof(buf));
+    while(true) {
+        bytes = read(item_trans_data->file_des, &ch, 1);
+        if(bytes == -1) {
+            if(errno == EINTR) continue;
+            else return false;
+        }
+        else if(bytes == 0) {
+            if(total_bytes == -1) return true;
+            else {
+                // Create structure and break
+                line.append(buf);
+                std::istringstream iss(line);
+                std::string token;
+                std::vector<std::string> tokens;
+                while(getline(iss, token, ',')) {
+                    tokens.push_back(token);
+                }
+                std::cout << "Tokens: " << tokens.size() << std::endl;
+                if(tokens.size() > 0) {
+                    tokens[2] = tokens[2].substr(0, tokens[2].find_last_not_of("\n"));
+                    ItemTransaction *temp = new ItemTransaction(stol(tokens[0]), stol(tokens[1]), stoi(tokens[2]));
+                    item_transactions.push_back(temp);
+//                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getGender() << std::endl;
+                    totalItemTransactions++;
+                }
+            }
+        }
+        else {
+            total_bytes += bytes;
+            if(total_bytes >= BUF_SIZE - 2) {
+                line.append(buf);
+                total_bytes = 0;
+                memset(buf, '\0', BUF_SIZE);
+                buf[total_bytes] = ch;
+            }
+            else buf[total_bytes] = ch;
+            if(ch == '\n') {
+                // Create structure
+                line.append(buf);
+                std::istringstream iss(line);
+                std::string token;
+                std::vector<std::string> tokens;
+                while(getline(iss, token, ',')) {
+                    tokens.push_back(token);
+                }
+//                std::cout << "Tokens: " << tokens.size() << std::endl;
+                line = ""; total_bytes = -1;
+                memset(buf, '\0', BUF_SIZE);
+                if(tokens.size() > 0) {
+                    tokens[2] = tokens[2].substr(0, tokens[2].find_last_not_of("\n"));
+                    ItemTransaction *temp = new ItemTransaction(stol(tokens[0]), stol(tokens[1]), stoi(tokens[2]));
+                    item_transactions.push_back(temp);
+//                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getGender() << std::endl;
+                    totalItemTransactions++;
+                }
+            }
+        }
+//        std::cout << "Total bytes: " << total_bytes << " Buf: " << buf << std::endl;
+    }
     return true;
 }

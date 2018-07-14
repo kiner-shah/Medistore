@@ -16,7 +16,9 @@ using namespace std;
 
 /* Global variables */
 bool staff_session_start = false;
-
+int row_center;
+int column_center;
+Staff *staff_instance = NULL;
 /* Function to clear console window */
 void clear_console() {
     system("tput reset");               // https://askubuntu.com/a/25079   
@@ -91,6 +93,14 @@ void change_option_flags_menu(int &ops, int max_index, int up_down) {
         else ops++;
     }
 }
+void destroy_objs_and_shutdown() {
+    static Store *store_obj = Store::get_instance_of_store();
+    cout << "destroy_objs_and_shutdown(): Deleting...\n";
+    delete store_obj;
+    store_obj = NULL;
+    if(store_obj != NULL) { cout << "ERROR: destroy_objs_and_shutdown(): store_obj not NULL after deletion\n"; exit(1); }
+    exit(0);
+}
 /** 
  * Function to set up the flags and variables when customer selects an option 
  * @param menu_options     the index specifying the option in the option list
@@ -119,22 +129,26 @@ void menu_selection(int &menu_options, string menu_list[], int menu_list_size, i
 /* Main function */
 int main() {
     /* Aligning the starting message to be exactly in the center of console window */
+    clear_console();
     struct winsize win;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);         // Input-Output Control (ioctl): TIOCGWINSZ (Terminal I/O Control Get Window Size)
-    int row_center = win.ws_row / 2;
-    int column_center = win.ws_col / 2;
+    row_center = win.ws_row / 2;
+    column_center = win.ws_col / 2;
     int no_of_spaces = column_center - 8;           // strlen(Welcome to Medistore) = 17. 17 / 2 = 8.
     display_in_center_row(row_center);
-    for(int i = 0; i < no_of_spaces; i++) cout<<" ";
+    for(int i = 0; i < no_of_spaces; i++) cout << " ";
     cout << "\033[1;32mWelcome to Medistore\033[0m";
     no_of_spaces = column_center - 12;
-    cout<<endl;
-    for(int i = 0; i < no_of_spaces + 1; i++) cout<<" ";
+    cout << endl;
+    for(int i = 0; i < no_of_spaces + 1; i++) cout << " ";
     cout << "\033[1;33m[Press Enter to Continue]\033[0m";
     cin.ignore();
     clear_console();
     
     /* Starting Store by getting its instance */
+    no_of_spaces = column_center - 5;
+    for(int i = 0; i < no_of_spaces + 1; i++) cout << " ";
+    cout << "Loading ...\n"; cout << endl; clear_console();
     static Store* store_object = Store::get_instance_of_store();
     int initial_menu_options = 1;
     int initial_menu_options_after_login = 1;
@@ -145,7 +159,7 @@ int main() {
     string customer_menu_list[3] = {" Purchase items    ", " View transactions "," Back              "};
     string staff_menu_list[4] = {" Check items stock      ", " Modify items           ", " Check item transactions ", " Back                    "};
 //    cout << initial_menu_option1 << " " << initial_menu_option2 << " " << initial_menu_option3 << endl;
-    while(1) {
+    while(true) {
         int mode_selected_initial_menu;
         if(staff_session_start == false) {
             display_menu(initial_menu_options, initial_menu_list, 3, 5, row_center - 1, column_center);
@@ -164,21 +178,24 @@ int main() {
             /*################################## LOGIN LOGIC ######################################*/
             if(staff_session_start == false) {
                 int count_staff_login_attempts = 0;
-                while(!store_object->validate_staff()) {
+                int staff_pos_vec = -1;
+                while((staff_pos_vec = store_object->validate_staff()) == -1) {
                     count_staff_login_attempts++;
                     if(count_staff_login_attempts >= 3) break;
                     cout << "\n";
                     for(int i = 0; i < column_center - 18; i++) cout << " ";
-                    cout << "\033[1;31m\t\t\t\tCredentials didn't match, try again!\033[0m" << endl;
+                    cout << "\033[1;31mCredentials didn't match, try again!\033[0m" << endl;
+                    sleep(1);
                 }
                 if(count_staff_login_attempts >= 3) {
                     cout << "\n";
-                    for(int i = 0; i < column_center - 36; i++) cout << " ";
-                    cout << "\033[1;31m\t\t\t\tSorry, you don't seem to have valid credentials try login after sometime\033[0m" << endl;
+                    for(int i = 0; i < column_center - 34; i++) cout << " ";
+                    cout << "\033[1;31mSorry, you don't seem to have valid credentials try login after sometime\033[0m" << endl;
                     sleep(5);
                     exit(0);
                 }
                 cout << "\n";
+                staff_instance = store_object->getStaff()[staff_pos_vec];
                 for(int i = 0; i < column_center - 18; i++) cout << " ";
                 cout << "\033[1;32mSuccessfully logged in..Opening menu\033[0m" << endl;
                 staff_session_start = true;
@@ -207,21 +224,24 @@ int main() {
             // TODO: Add code here
             if(staff_session_start == false) {
                 int count_staff_login_attempts = 0;
-                while(!store_object->validate_staff()) {
+                int staff_pos_vec = -1;
+                while((staff_pos_vec = store_object->validate_staff()) == -1) {
                     count_staff_login_attempts++;
                     if(count_staff_login_attempts >= 3) break;
                     cout << "\n";
                     for(int i = 0; i < column_center - 18; i++) cout << " ";
-                    cout << "\033[1;31m\t\t\t\tCredentials didn't match, try again!\033[0m" << endl;
+                    cout << "\033[1;31mCredentials didn't match, try again!\033[0m" << endl;
+                    sleep(1);
                 }
                 if(count_staff_login_attempts >= 3) {
                     cout << "\n";
-                    for(int i = 0; i < column_center - 36; i++) cout << " ";
-                    cout << "\033[1;31m\t\t\t\tSorry, you don't seem to have valid credentials try login after sometime\033[0m" << endl;
+                    for(int i = 0; i < column_center - 34; i++) cout << " ";
+                    cout << "\033[1;31mSorry, you don't seem to have valid credentials try login after sometime\033[0m" << endl;
                     sleep(5);
                     exit(0);
                 }
                 cout << "\n";
+                staff_instance = store_object->getStaff()[staff_pos_vec];
                 for(int i = 0; i < column_center - 18; i++) cout << " ";
                 cout << "\033[1;32mSuccessfully logged in..Opening menu\033[0m" << endl;
                 staff_session_start = true;
@@ -233,7 +253,21 @@ int main() {
             menu_selection(staff_menu_options, staff_menu_list, 4, 12, row_center, column_center);
             int mode_selected_staff_menu = staff_menu_options;
             if(mode_selected_staff_menu == 1) {     // Check items stock
-                
+                clear_console();
+                for(int i = 0; i < column_center - 8; i++) cout << " ";
+                string input_string;
+                cout << "Enter Item name: ";
+                cin >> input_string;
+                if(staff_instance->check_item_stock(input_string)) {
+                    for(int i = 0; i < column_center - 7; i++) cout << " ";
+                    cout << "\033[1;32mStock is there\033[0m";
+                }
+                else {
+                    for(int i = 0; i < column_center - 4; i++) cout << " ";
+                    cout << "\033[1;31mNo stock\033[0m";
+                }
+                cin.ignore();
+                cin.ignore();
             }
             else if(mode_selected_staff_menu == 2) {
 
@@ -247,7 +281,8 @@ int main() {
         }
         /* User selected Exit */
         else if(!staff_session_start && mode_selected_initial_menu == 3) {
-            exit(0);
+//            exit(0);
+            destroy_objs_and_shutdown();
         }
         else if(staff_session_start && mode_selected_initial_menu == 3) {
             staff_session_start = false;

@@ -7,19 +7,24 @@
 
 #include "staff.h"
 #include "store.h"
+#include <vector>
 /* Global variables */
 bool Staff::check_item_stock(std::string item_name) {
     static Store* store_instance = Store::get_instance_of_store();
-    return true;
-}
-
-bool Staff::add_customer() {
-    /*
-     * 1. Search if customer is present already
-     * 2. If not, then add the new customer
-     */
+    std::vector<Item*> items = store_instance->getItems();
+    unsigned int items_sz = store_instance->getTotalItems();
     
-    return true;
+    for(int i = 0; i < items_sz; i++) {
+        if(item_name == items[i]->item_name) {
+            if(items[i]->item_stock > 0)
+                return true;
+            else 
+                return false;
+        }
+    }
+    
+    std::cout << "\033[1;31mItem Not Found\033[0m\n";
+    return false;
 }
 
 bool Staff::modify_item(int mode) {
@@ -28,8 +33,4 @@ bool Staff::modify_item(int mode) {
 
 void Staff::check_item_transactions() {
     
-}
-
-bool Staff::login() {
-    return true;
 }

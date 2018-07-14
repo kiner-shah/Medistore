@@ -8,17 +8,16 @@
 #ifndef AUTHENTICATION_H
 #define	AUTHENTICATION_H
 
-#include "customer.h"
-#include "staff.h"
 #include "linux_getch.h"
 #include "sha512.h"
+#include "store.h"
 #include <iostream>
 #include <string>
 #include <unistd.h>
 #include <sys/ioctl.h>
 
 //bool authenticate_customer();
-bool authenticate_staff();
+int authenticate_staff();
 std::string compute_hash(std::string);
 
 #endif	/* AUTHENTICATION_H */
