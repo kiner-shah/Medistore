@@ -25,6 +25,18 @@ typedef struct ITEM {
         item_name = name;
         item_stock = stock;
         item_price = price;
+//        item_expiry.tm_gmtoff = 0;
+//        item_expiry.tm_hour = 0;
+//        item_expiry.tm_isdst = 0;
+//        item_expiry.tm_mday = 0;
+//        item_expiry.tm_min = 0;
+//        item_expiry.tm_mon = 0;
+//        item_expiry.tm_sec = 0;
+//        item_expiry.tm_wday = 0;
+//        item_expiry.tm_yday = 0;
+//        item_expiry.tm_year = 0;
+//        item_expiry.tm_zone = NULL;
+        
         if(date != "NIL") {
             int temp_date_len = date.length(), count = 0, j = 0;
             char buf[1024]; memset(buf, '\0', 1024);

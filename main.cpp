@@ -6,10 +6,9 @@
  */
 /*
  * Expected functionalities:
- * 1. Authentication of Staff.
+ * 1. Authentication of Staff.  --> done
  * 2. Generation of Bill
  * 3. Storing of transactions and history.
- * 4. Data analysis by staff.
  */
 #include "includes.h"
 using namespace std;
@@ -207,7 +206,10 @@ int main() {
             menu_selection(customer_menu_options, customer_menu_list, 3, 9, row_center, column_center);
             int mode_selected_customer_menu = customer_menu_options;
             if(mode_selected_customer_menu == 1) {
-
+                // Show item list to the customer (in parts of say 10 products): item name, item id, item price
+                // only if stock for that item is there.
+                // Enter the item ID for the item to purchase, and the quantity
+                // Take customer details: name, gender, age, doctor, prescription (y/n)
             }
             else if(mode_selected_customer_menu == 2) {
 
@@ -256,8 +258,8 @@ int main() {
                 clear_console();
                 for(int i = 0; i < column_center - 8; i++) cout << " ";
                 string input_string;
-                cout << "Enter Item name: ";
-                cin >> input_string;
+                cout << "\n\n\nEnter Item name: ";
+                getline(cin, input_string);
                 if(staff_instance->check_item_stock(input_string)) {
                     for(int i = 0; i < column_center - 7; i++) cout << " ";
                     cout << "\033[1;32mStock is there\033[0m";
@@ -266,7 +268,6 @@ int main() {
                     for(int i = 0; i < column_center - 4; i++) cout << " ";
                     cout << "\033[1;31mNo stock\033[0m";
                 }
-                cin.ignore();
                 cin.ignore();
             }
             else if(mode_selected_staff_menu == 2) {

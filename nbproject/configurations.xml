@@ -11,18 +11,16 @@
       <itemPath>file_mngr.h</itemPath>
       <itemPath>includes.h</itemPath>
       <itemPath>item.h</itemPath>
-      <itemPath>item_transaction.h</itemPath>
       <itemPath>linux_getch.h</itemPath>
       <itemPath>sha512.h</itemPath>
       <itemPath>staff.h</itemPath>
       <itemPath>store.h</itemPath>
-      <itemPath>transaction.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>bill_data.bin</itemPath>
       <itemPath>customer_data.bin</itemPath>
-      <itemPath>item_transactions_data.bin</itemPath>
       <itemPath>items_data.bin</itemPath>
       <itemPath>staff_data.bin</itemPath>
     </logicalFolder>
@@ -69,6 +67,7 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <standard>8</standard>
           <commandLine>-ggdb</commandLine>
         </ccTool>
       </compileType>
@@ -79,6 +78,8 @@
       <item path="authentication.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="bill.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="bill_data.bin" ex="false" tool="3" flavor2="0">
       </item>
       <item path="customer.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -113,10 +114,6 @@
       </item>
       <item path="item.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="item_transaction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="item_transactions_data.bin" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="items_data.bin" ex="false" tool="3" flavor2="0">
       </item>
       <item path="linux_getch.cpp" ex="false" tool="1" flavor2="0">
@@ -142,8 +139,6 @@
       <item path="test_file.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/newsimpletest.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="transaction.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -174,6 +169,8 @@
       </item>
       <item path="bill.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="bill_data.bin" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="customer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="customer.h" ex="false" tool="3" flavor2="0">
@@ -207,10 +204,6 @@
       </item>
       <item path="item.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="item_transaction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="item_transactions_data.bin" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="items_data.bin" ex="false" tool="3" flavor2="0">
       </item>
       <item path="linux_getch.cpp" ex="false" tool="1" flavor2="0">
@@ -236,8 +229,6 @@
       <item path="test_file.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/newsimpletest.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="transaction.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

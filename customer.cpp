@@ -19,10 +19,6 @@ void Customer::purchaseItems() {
      */
 }
 
-void Customer::checkBalance() {
-    
-}
-
 void Customer::checkTransactions() {
     
 }

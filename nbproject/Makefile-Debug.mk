@@ -78,42 +78,42 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/medistore.exe: ${OBJECTFILES}
 ${OBJECTDIR}/authentication.o: authentication.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/authentication.o authentication.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/authentication.o authentication.cpp
 
 ${OBJECTDIR}/customer.o: customer.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/customer.o customer.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/customer.o customer.cpp
 
 ${OBJECTDIR}/file_mngr.o: file_mngr.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/file_mngr.o file_mngr.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/file_mngr.o file_mngr.cpp
 
 ${OBJECTDIR}/linux_getch.o: linux_getch.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/linux_getch.o linux_getch.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/linux_getch.o linux_getch.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 ${OBJECTDIR}/sha512.o: sha512.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/sha512.o sha512.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/sha512.o sha512.cpp
 
 ${OBJECTDIR}/staff.o: staff.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/staff.o staff.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/staff.o staff.cpp
 
 ${OBJECTDIR}/store.o: store.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/store.o store.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/store.o store.cpp
 
 # Subprojects
 .build-subprojects:
@@ -128,13 +128,13 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/file_mngr_test.o ${TESTDIR}/tests/newsimplet
 ${TESTDIR}/file_mngr_test.o: file_mngr_test.cpp 
 	${MKDIR} -p ${TESTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/file_mngr_test.o file_mngr_test.cpp
+	$(COMPILE.cc) -g -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/file_mngr_test.o file_mngr_test.cpp
 
 
 ${TESTDIR}/tests/newsimpletest.o: tests/newsimpletest.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I. -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newsimpletest.o tests/newsimpletest.cpp
+	$(COMPILE.cc) -g -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newsimpletest.o tests/newsimpletest.cpp
 
 
 ${OBJECTDIR}/authentication_nomain.o: ${OBJECTDIR}/authentication.o authentication.cpp 
@@ -145,7 +145,7 @@ ${OBJECTDIR}/authentication_nomain.o: ${OBJECTDIR}/authentication.o authenticati
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/authentication_nomain.o authentication.cpp;\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/authentication_nomain.o authentication.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/authentication.o ${OBJECTDIR}/authentication_nomain.o;\
 	fi
@@ -158,7 +158,7 @@ ${OBJECTDIR}/customer_nomain.o: ${OBJECTDIR}/customer.o customer.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/customer_nomain.o customer.cpp;\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/customer_nomain.o customer.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/customer.o ${OBJECTDIR}/customer_nomain.o;\
 	fi
@@ -171,7 +171,7 @@ ${OBJECTDIR}/file_mngr_nomain.o: ${OBJECTDIR}/file_mngr.o file_mngr.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/file_mngr_nomain.o file_mngr.cpp;\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/file_mngr_nomain.o file_mngr.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/file_mngr.o ${OBJECTDIR}/file_mngr_nomain.o;\
 	fi
@@ -184,7 +184,7 @@ ${OBJECTDIR}/linux_getch_nomain.o: ${OBJECTDIR}/linux_getch.o linux_getch.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/linux_getch_nomain.o linux_getch.cpp;\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/linux_getch_nomain.o linux_getch.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/linux_getch.o ${OBJECTDIR}/linux_getch_nomain.o;\
 	fi
@@ -197,7 +197,7 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main_nomain.o main.cpp;\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main_nomain.o main.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/main.o ${OBJECTDIR}/main_nomain.o;\
 	fi
@@ -210,7 +210,7 @@ ${OBJECTDIR}/sha512_nomain.o: ${OBJECTDIR}/sha512.o sha512.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/sha512_nomain.o sha512.cpp;\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/sha512_nomain.o sha512.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/sha512.o ${OBJECTDIR}/sha512_nomain.o;\
 	fi
@@ -223,7 +223,7 @@ ${OBJECTDIR}/staff_nomain.o: ${OBJECTDIR}/staff.o staff.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/staff_nomain.o staff.cpp;\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/staff_nomain.o staff.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/staff.o ${OBJECTDIR}/staff_nomain.o;\
 	fi
@@ -236,7 +236,7 @@ ${OBJECTDIR}/store_nomain.o: ${OBJECTDIR}/store.o store.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/store_nomain.o store.cpp;\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/store_nomain.o store.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/store.o ${OBJECTDIR}/store_nomain.o;\
 	fi

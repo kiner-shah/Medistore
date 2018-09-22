@@ -8,7 +8,7 @@
  * [1]  http://www.iwar.org.uk/comsec/resources/cipher/sha256-384-512.pdf
  */
 #include <vector>
-
+#include <sstream>
 #include "sha512.h"
 
 //#define __DEBUG_SHA512__

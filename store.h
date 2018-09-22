@@ -9,7 +9,6 @@
 #define	STORE_H
 
 #include "item.h"
-#include "item_transaction.h"
 #include "bill.h"
 #include "staff.h"
 #include "customer.h"
@@ -26,18 +25,22 @@ class Store {
         unsigned int totalCustomers; 
         std::vector<Staff*> staff; // defining a Singleton so that only one instance of store exists
         unsigned int totalStaff;
+        std::vector<Item*> items;
+        long totalItems;
+        std::vector<Bill*> bills;
+        long totalBills;
         FileMngr *customer_data;
         FileMngr *staff_data;
         FileMngr *items_data;
-        FileMngr *item_trans_data;
+        FileMngr *bill_data;
         bool loadCustomerData();
         bool loadStaffData();
         bool loadItemsData();
-        bool loadItemTransactionsData();
+        bool loadBillData();
         bool unloadCustomerData();
         bool unloadStaffData();
         bool unloadItemsData();
-        bool unloadItemTransactionsData();
+        bool unloadBillData();
         static Store* instance;
         Store() {                                 // private constructor for Singleton
 //            customers = NULL;
@@ -47,7 +50,6 @@ class Store {
 //            items = NULL;
             totalItems = 0;
 //            item_transactions = NULL;
-            totalItemTransactions = 0;
             if(!loadCustomerData()) {
                 std::cerr << "ERROR: loadCustomerData(): FAILED" << std::endl;
             }
@@ -57,15 +59,10 @@ class Store {
             if(!loadItemsData()) {
                 std::cerr << "ERROR: loadItemsData(): FAILED" << std::endl;
             }
-            if(!loadItemTransactionsData()) {
-                std::cerr << "ERROR: loadItemTransactionsData(): FAILED" << std::endl;
+            if(!loadBillData()) {
+                std::cerr << "ERROR: loadBillData(): FAILED" << std::endl;
             }
         }
-    protected:
-        std::vector<Item*> items;
-        long totalItems;
-        std::vector<ItemTransaction*> item_transactions;
-        long totalItemTransactions;
         
     public:
         Bill generate_bill();
@@ -79,8 +76,8 @@ class Store {
         unsigned int getTotalCustomers() { return totalCustomers; }
         std::vector<Item*> getItems() { return items; }
         unsigned int getTotalItems() { return totalItems; }
-        std::vector<ItemTransaction*> getItemTransactions() { return item_transactions; }
-        unsigned int getTotalItemTransactions() { return totalItemTransactions; }
+        std::vector<Bill*> getBills() { return bills; }
+        unsigned int getTotalBills() { return totalBills; }
 //        static Store& get_instance_of_store() {       // Another alternative for Singleton
 //            static Store instance;
 //            return instance;
@@ -101,9 +98,9 @@ class Store {
             if(!unloadItemsData()) {
                 std::cerr << "ERROR: unloadItemsData(): FAILED" << std::endl;
             }
-//            if(!unloadItemTransactionsData()) {
-//                std::cerr << "ERROR: unloadItemTransactionsData(): FAILED" << std::endl;
-//            }
+            if(!unloadBillData()) {
+                std::cerr << "ERROR: unloadBillData(): FAILED" << std::endl;
+            }
         }
 };
 
