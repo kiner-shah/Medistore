@@ -218,7 +218,7 @@ bool Store::loadStaffData() {
                     std::stringstream ss;
                     ss << tokens[4];
                     ss >> staff_age;
-                    tokens[5] = tokens[5].substr(0, tokens[5].find_last_not_of('\n'));
+                    tokens[5] = tokens[5].substr(0, tokens[5].find_last_not_of("\n"));
                     Staff *temp = new Staff(tokens[1], tokens[0], tokens[2], tokens[3], staff_age, tokens[5]);
                     staff.push_back(temp);
 //                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getPasswordHash() << std::endl;

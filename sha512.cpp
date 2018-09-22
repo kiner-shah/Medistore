@@ -214,7 +214,7 @@ string computeSHA512(string input_message) {
 #endif
     ostringstream o2; 
     for(int i = 0; i < 8; i++) {
-        o2 << std::hex << hashes[i];
+        o2 << std::setw(16) << std::setfill('0') << std::hex << hashes[i];
     }
     return o2.str();
 }
@@ -224,5 +224,6 @@ string computeSHA512(string input_message) {
  * Input: abc
  * Output: ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f
  * Input: I am a dog
- * Output: C96E7C680A303627214F8B136F5B8CCD674E12A5D200F6F64BEEC1B8764FAE76371078FF5204FED54A5328E29817C50D36040D1E561557B5899D377B79B5C339
+ * Output: c96e7c680a303627214f8b136f5b8ccd674e12a5d200f6f64beec1b8764fae76371078ff5204fed54a5328e29817c50d36040d1e561557b5899d377b79b5c339
+ * 
  */

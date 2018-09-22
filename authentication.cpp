@@ -109,6 +109,8 @@ int authenticate_staff() {
     for(unsigned int i = 0; i < staff_sz; i++) {
         std::string sname = staff[i]->getName();
         std::string spass = staff[i]->getPasswordHash();
+//        std::cout << std::endl << spass << std::endl;
+//        std::cout << pass_hash << std::endl;
         if(sname == name && spass == pass_hash) {
             pos = i;
             found = true;
