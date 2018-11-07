@@ -11,6 +11,14 @@
 #include <string>
 #include <fstream>
 
+typedef enum MODIFY_MODES {
+    MODIFY_NAME     = 1, 
+    MODIFY_PRICE    = 2, 
+    MODIFY_STOCK    = 3, 
+    MODIFY_EXPIRY   = 4,
+    DEFAULT_MODE    = 5
+} ModifyModes;
+
 class Staff {
     private:
         int staff_age;
@@ -31,8 +39,7 @@ class Staff {
         std::string getPasswordHash() { return staff_password; }
         // Get items and item transactions from store for below functions
         bool check_item_stock(std::string item_name);
-        bool modify_item(int mode);
-        void check_item_transactions();
+        bool modify_item(ModifyModes mode, std::string item_name);
 };
 
 #endif	/* STAFF_H */

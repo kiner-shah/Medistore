@@ -16,27 +16,10 @@
 typedef struct ITEM {
     std::string item_id;
     std::string item_name;
-    int item_stock;
+    unsigned int item_stock;
     float item_price;
     struct tm item_expiry;
-    
-    ITEM(std::string id, std::string name, int stock, float price, std::string date) {
-        item_id = id;
-        item_name = name;
-        item_stock = stock;
-        item_price = price;
-//        item_expiry.tm_gmtoff = 0;
-//        item_expiry.tm_hour = 0;
-//        item_expiry.tm_isdst = 0;
-//        item_expiry.tm_mday = 0;
-//        item_expiry.tm_min = 0;
-//        item_expiry.tm_mon = 0;
-//        item_expiry.tm_sec = 0;
-//        item_expiry.tm_wday = 0;
-//        item_expiry.tm_yday = 0;
-//        item_expiry.tm_year = 0;
-//        item_expiry.tm_zone = NULL;
-        
+    void convertToSTTM(std::string date) {
         if(date != "NIL") {
             int temp_date_len = date.length(), count = 0, j = 0;
             char buf[1024]; memset(buf, '\0', 1024);
@@ -64,8 +47,25 @@ typedef struct ITEM {
             item_expiry.tm_year -= 1900;
             item_expiry.tm_mon--;
             if(count == 2) item_expiry.tm_mday = 1;
-        }
-        
+        }        
+    }
+    ITEM(std::string id, std::string name, unsigned int stock, float price, std::string date) {
+        item_id = id;
+        item_name = name;
+        item_stock = stock;
+        item_price = price;
+//        item_expiry.tm_gmtoff = 0;
+//        item_expiry.tm_hour = 0;
+//        item_expiry.tm_isdst = 0;
+//        item_expiry.tm_mday = 0;
+//        item_expiry.tm_min = 0;
+//        item_expiry.tm_mon = 0;
+//        item_expiry.tm_sec = 0;
+//        item_expiry.tm_wday = 0;
+//        item_expiry.tm_yday = 0;
+//        item_expiry.tm_year = 0;
+//        item_expiry.tm_zone = NULL;
+        convertToSTTM(date);
     }
 } Item;
 

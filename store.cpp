@@ -318,7 +318,7 @@ bool Store::loadItemsData() {
                 }
             }
         }
-        std::cout << "Total bytes: " << total_bytes << " Buf: " << buf << std::endl;
+//        std::cout << "Total bytes: " << total_bytes << " Buf: " << buf << std::endl;
     }
     return true;
 }
@@ -430,7 +430,7 @@ bool Store::loadBillData() {
                 }
             }
         }
-        std::cout << "Total bytes: " << total_bytes << " Buf: " << buf << std::endl;
+//        std::cout << "Total bytes: " << total_bytes << " Buf: " << buf << std::endl;
     }
     return true;
 }
