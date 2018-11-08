@@ -37,17 +37,18 @@ typedef struct ITEM {
                     memset(buf, '\0', 1024); 
                     j = 0;
                 }
-                else if(count == 2) {
-                    count++;
-                    item_expiry.tm_mday = atoi(buf);
-                    memset(buf, '\0', 1024); 
-                    j = 0;
-                }
+                
+            }
+            if(count == 2) {
+                count++;
+                item_expiry.tm_mday = atoi(buf);
+                memset(buf, '\0', 1024); 
+                j = 0;
             }
             item_expiry.tm_year -= 1900;
             item_expiry.tm_mon--;
             if(count == 2) item_expiry.tm_mday = 1;
-        }        
+        }
     }
     ITEM(std::string id, std::string name, unsigned int stock, float price, std::string date) {
         item_id = id;
