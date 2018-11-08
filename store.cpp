@@ -379,7 +379,7 @@ bool Store::loadBillData() {
                         item_ids[j] = tokens[3 + k];
                         qty[j] = stoi(tokens[3 + k + 1]);
                     }
-                    Bill *temp = new Bill(stol(tokens[0]), tokens[1], items_no, stof(tokens[2 * items_no]));
+                    Bill *temp = new Bill(stol(tokens[0]), tokens[1], items_no, stof(tokens[3 + 2 * items_no]));
                     temp->item_id_list = item_ids;
                     temp->item_qty = qty;
                     
@@ -420,7 +420,7 @@ bool Store::loadBillData() {
                         item_ids[j] = tokens[3 + k];
                         qty[j] = stoi(tokens[3 + k + 1]);
                     }
-                    Bill *temp = new Bill(stol(tokens[0]), tokens[1], items_no, stof(tokens[2 * items_no]));
+                    Bill *temp = new Bill(stol(tokens[0]), tokens[1], items_no, stof(tokens[3 + 2 * items_no]));
                     temp->item_id_list = item_ids;
                     temp->item_qty = qty;
                     

@@ -50,6 +50,7 @@ class Store {
 //            items = NULL;
             totalItems = 0;
 //            item_transactions = NULL;
+            totalBills = 0;
             if(!loadCustomerData()) {
                 std::cerr << "ERROR: loadCustomerData(): FAILED" << std::endl;
             }

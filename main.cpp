@@ -261,6 +261,40 @@ void display_items_with_check_stock_privilege() {
             return;
     }   
 }
+Item* getItem(string item_id) {
+    static Store* store_obj = Store::get_instance_of_store();
+    vector<Item*> items = store_obj->getItems();
+    unsigned int len_items = store_obj->getTotalItems();
+    for (unsigned int i = 0; i < len_items; i++) {
+        if (items[i]->item_id == item_id) {
+            return items[i];
+        }
+    }
+    return NULL;
+}
+void print_bill(Bill* bill) {
+    cout << "\n\n";
+    for (int i = 0; i < column_center - 2; i++) cout << " ";
+    cout << "BILL\n";
+    cout << "Bill No. " << bill->bill_no;
+    for (int i = column_center + 3; i < column_center + 15; i++) cout << " ";
+    cout << "Doctor: " << bill->doctor_name << endl;
+    cout << setw(20) << "ITEM NAME" << setw(11) << "ITEM QTY" << setw(11) << "ITEM PRICE" << setw(11) << "PRC x QTY" << endl;
+    for (unsigned int i = 0; i < bill->item_id_no; i++) {
+        Item* item = getItem(bill->item_id_list[i]);
+        if (item != NULL) {
+            cout << setw(20) << item->item_name << 
+                    setw(11) << bill->item_qty[i] << 
+                    setw(11) << item->item_price <<
+                    setw(11) << item->item_price * bill->item_qty[i] << endl;
+        }
+        else {
+            cout << "\033[1;31mERROR: Item not found for item_id = " << bill->item_id_list[i] << "\033[0m" << endl;
+        }
+    }
+    for (int i = 0; i < column_center - 6; i++) cout << " ";
+    cout << "Total Amount = " << bill->total_amount << endl;
+}
 /* Main function */
 int main() {
     /* Aligning the starting message to be exactly in the center of console window */
@@ -359,7 +393,6 @@ int main() {
     //        display_menu(staff_menu_options, 10, row_center - 1, column_center);
             clear_console();
             /*################################## LOGIN LOGIC ######################################*/
-            // TODO: Add code here
             if(staff_session_start == false) {
                 int count_staff_login_attempts = 0;
                 int staff_pos_vec = -1;

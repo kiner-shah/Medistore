@@ -54,17 +54,17 @@ typedef struct ITEM {
         item_name = name;
         item_stock = stock;
         item_price = price;
-//        item_expiry.tm_gmtoff = 0;
-//        item_expiry.tm_hour = 0;
-//        item_expiry.tm_isdst = 0;
-//        item_expiry.tm_mday = 0;
-//        item_expiry.tm_min = 0;
-//        item_expiry.tm_mon = 0;
-//        item_expiry.tm_sec = 0;
-//        item_expiry.tm_wday = 0;
-//        item_expiry.tm_yday = 0;
-//        item_expiry.tm_year = 0;
-//        item_expiry.tm_zone = NULL;
+        item_expiry.tm_gmtoff = 0;
+        item_expiry.tm_hour = 0;
+        item_expiry.tm_isdst = 0;
+        item_expiry.tm_mday = 0;
+        item_expiry.tm_min = 0;
+        item_expiry.tm_mon = 0;
+        item_expiry.tm_sec = 0;
+        item_expiry.tm_wday = 0;
+        item_expiry.tm_yday = 0;
+        item_expiry.tm_year = 0;
+        item_expiry.tm_zone = NULL;
         convertToSTTM(date);
     }
 } Item;

@@ -37,7 +37,7 @@ class Staff {
         std::string getID() { return staff_id; }
         int getAge() { return staff_age; }
         std::string getPasswordHash() { return staff_password; }
-        // Get items and item transactions from store for below functions
+        // Get items from store for below functions
         bool check_item_stock(std::string item_name);
         bool modify_item(ModifyModes mode, std::string item_name);
 };
