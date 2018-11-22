@@ -8,8 +8,9 @@
  * Expected functionalities:
  * 1. Authentication of Staff.  --> done
  * 2. Showing item list (modify / check stock)  --> done
- * 2. Generation of Bill
- * 3. Storing of transactions and history.
+ * 3. Generation of Bill
+ * 4. Showing bills     --> done
+ * 3. Storing of bills and updates.
  */
 #include "includes.h"
 using namespace std;
@@ -20,6 +21,7 @@ int row_center;
 int column_center;
 Staff *staff_instance = NULL;
 const unsigned int item_list_display_size = 10;
+const unsigned int bill_list_display_size = 10;
 /* Function to clear console window */
 void clear_console() {
     system("tput reset");               // https://askubuntu.com/a/25079   
@@ -272,13 +274,23 @@ Item* getItem(string item_id) {
     }
     return NULL;
 }
+Bill* getBill(long bill_no) {
+    static Store* store_obj = Store::get_instance_of_store();
+    vector<Bill*> bills = store_obj->getBills();
+    unsigned int len_bills = store_obj->getTotalBills();
+    for (unsigned int i = 0; i < len_bills; i++) {
+        if (bills[i]->bill_no == bill_no) {
+            return bills[i];
+        }
+    }
+    return NULL;
+}
 void print_bill(Bill* bill) {
     cout << "\n\n";
     for (int i = 0; i < column_center - 2; i++) cout << " ";
     cout << "BILL\n";
-    cout << "Bill No. " << bill->bill_no;
-    for (int i = column_center + 3; i < column_center + 15; i++) cout << " ";
-    cout << "Doctor: " << bill->doctor_name << endl;
+    cout << setw(20) << "Bill No. " << bill->bill_no << endl;
+    cout << setw(20) << "Doctor: " << bill->doctor_name << endl;
     cout << setw(20) << "ITEM NAME" << setw(11) << "ITEM QTY" << setw(11) << "ITEM PRICE" << setw(11) << "PRC x QTY" << endl;
     for (unsigned int i = 0; i < bill->item_id_no; i++) {
         Item* item = getItem(bill->item_id_list[i]);
@@ -294,6 +306,65 @@ void print_bill(Bill* bill) {
     }
     for (int i = 0; i < column_center - 6; i++) cout << " ";
     cout << "Total Amount = " << bill->total_amount << endl;
+}
+void display_bills() {
+    static Store* store_obj = Store::get_instance_of_store();
+    vector<Bill*> bills = store_obj->getBills();
+    unsigned int len_bills = store_obj->getTotalBills();
+    bool prev = false, next = true;
+    unsigned int sc_no = 0;
+    while (1) {
+        clear_console();
+        std::cout << setw(11) << "BILL NO" << std::endl;
+        for (unsigned int i = sc_no; i < min(sc_no + bill_list_display_size, len_bills); i++) {
+            cout << setw(11) << bills[i]->bill_no << std::endl;
+        }
+        std::cout << "Enter [p] for previous, [n] for next, [v] to view a bill, [q] to quit" << std::endl;
+        char c = linux_getch(1);
+        if (c == 'n' && next) {
+            if(sc_no + bill_list_display_size == len_bills - 1) {
+                sc_no += bill_list_display_size;
+                prev = true;
+                next = false;
+            }
+            else if (sc_no + bill_list_display_size > len_bills - 1) {
+                // Do nothing
+            }
+            else {
+                sc_no += bill_list_display_size;
+                prev = true;
+                next = true;
+            }
+        }
+        else if (c == 'p' && prev) {
+            if(sc_no - bill_list_display_size == 0) {
+                sc_no += bill_list_display_size;
+                prev = false;
+                next = true;
+            }
+            else if(sc_no - bill_list_display_size < 0) {
+                // Do nothing
+            }
+            else {
+                sc_no -= bill_list_display_size;
+                prev = true;
+                next = true;
+            }
+        }
+        else if (c == 'v')
+            break;
+        else if (c == 'q')
+            return;
+    }
+    long bill_no;
+    cout << "Enter a bill no. to view: ";
+    cin >> bill_no;
+    Bill* target_bill = getBill(bill_no);
+    if (target_bill != NULL) {
+        print_bill(target_bill);
+    }
+    else
+        cout << "\033[1;31mERROR: Bill no. not found\033[0m" << endl;
 }
 /* Main function */
 int main() {
@@ -382,7 +453,10 @@ int main() {
                 // Take customer details: name, gender, age, doctor, prescription (y/n)
             }
             else if(mode_selected_customer_menu == 2) {
-                
+                display_bills();
+                cin.ignore();
+                cin.ignore();
+                clear_console();
             }
             else if(mode_selected_customer_menu == 3) {
                 clear_console();
