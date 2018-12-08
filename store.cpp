@@ -12,12 +12,23 @@
 #include <sstream>
 //#include <cassert>
 Store* Store::instance = NULL;
-// TODO
-Bill Store::generate_bill() {
-    Bill bill(0, "", 0, 0.0);
-    return bill;
+Bill* Store::generate_bill(std::map<std::string, int> items_qty_map, long bill_no, std::string doctor_name, float total) {
+    size_t map_sz = items_qty_map.size();
+    Bill* new_bill = new BILL(bill_no, doctor_name, map_sz, total);
+    new_bill->item_id_list = new std::string[map_sz];
+    new_bill->item_qty = new unsigned int[map_sz];
+    int i = 0;
+    for (std::pair<std::string, int> p : items_qty_map) {
+        new_bill->item_id_list[i] = p.first;
+        new_bill->item_qty[i] = p.second;
+        i++;
+    }
+    return new_bill;
 }
-
+void Store::addNewBill(Bill* bill) {
+    bills.push_back(bill);
+    totalBills++;
+}
 // TODO
 void Store::display_items() {
     std::cout << "Items list" << std::endl;
@@ -374,7 +385,7 @@ bool Store::loadBillData() {
 //                    tokens[4] = tokens[4].substr(0, tokens[4].find_last_not_of('\n'));
                     unsigned int items_no = stoi(tokens[2]);
                     std::string *item_ids = new std::string[items_no];
-                    int *qty = new int[items_no];
+                    unsigned int *qty = new unsigned int[items_no];
                     for(unsigned int k = 0, j = 0; k < 2 * items_no; j++, k += 2) {
                         item_ids[j] = tokens[3 + k];
                         qty[j] = stoi(tokens[3 + k + 1]);
@@ -415,7 +426,7 @@ bool Store::loadBillData() {
 //                    tokens[4] = tokens[4].substr(0, tokens[4].find_last_not_of('\n'));
                     unsigned int items_no = stoi(tokens[2]);
                     std::string *item_ids = new std::string[items_no];
-                    int *qty = new int[items_no];
+                    unsigned int *qty = new unsigned int[items_no];
                     for(unsigned int k = 0, j = 0; k < 2 * items_no; j++, k += 2) {
                         item_ids[j] = tokens[3 + k];
                         qty[j] = stoi(tokens[3 + k + 1]);

@@ -161,7 +161,7 @@ string display_items_with_modify_privelege() {
     unsigned int sc_no = 0;
     while (1) {
         clear_console();
-        std::cout << setw(11) << 
+        std::cout << std::endl << std::endl << setw(11) << 
             "ITEM ID" << setw(20) << 
             "ITEM NAME" << setw(11) << 
             "ITEM PRICE" << setw(11) << 
@@ -219,7 +219,7 @@ void display_items_with_check_stock_privilege() {
     unsigned int sc_no = 0;
     while (1) {
         clear_console();
-        std::cout << setw(11) << 
+        std::cout << std::endl << std::endl << setw(11) << 
             "ITEM ID" << setw(20) << 
             "ITEM NAME" << setw(11) << 
             "ITEM PRICE" << setw(11) << 
@@ -307,7 +307,7 @@ void print_bill(Bill* bill) {
     for (int i = 0; i < column_center - 6; i++) cout << " ";
     cout << "Total Amount = " << bill->total_amount << endl;
 }
-void display_bills() {
+bool display_bills() {
     static Store* store_obj = Store::get_instance_of_store();
     vector<Bill*> bills = store_obj->getBills();
     unsigned int len_bills = store_obj->getTotalBills();
@@ -315,7 +315,7 @@ void display_bills() {
     unsigned int sc_no = 0;
     while (1) {
         clear_console();
-        std::cout << setw(11) << "BILL NO" << std::endl;
+        std::cout << std::endl << std::endl << setw(11) << "BILL NO" << std::endl;
         for (unsigned int i = sc_no; i < min(sc_no + bill_list_display_size, len_bills); i++) {
             cout << setw(11) << bills[i]->bill_no << std::endl;
         }
@@ -351,10 +351,12 @@ void display_bills() {
                 next = true;
             }
         }
-        else if (c == 'v')
+        else if (c == 'v') {
             break;
-        else if (c == 'q')
-            return;
+        }
+        else if (c == 'q') {
+            return false;
+        }
     }
     long bill_no;
     cout << "Enter a bill no. to view: ";
@@ -365,6 +367,127 @@ void display_bills() {
     }
     else
         cout << "\033[1;31mERROR: Bill no. not found\033[0m" << endl;
+    return true;
+}
+long last_bill_no_today() {
+    static Store* store_obj = Store::get_instance_of_store();
+    vector<Bill*> bills = store_obj->getBills();
+    unsigned int len_bills = store_obj->getTotalBills();
+    // get last bill number for today
+    struct tm* t;
+    time_t cur_time = time(NULL);
+    t = localtime(&cur_time);
+    int year = t->tm_year + 1900;
+    int mon = t->tm_mon + 1;
+    int day = t->tm_mday;
+    int max = -1;
+    for (unsigned int i = 0; i < len_bills; i++) {
+        ostringstream s;
+        s << bills[i]->bill_no;
+        string st = s.str();
+        int y, m, d, no;
+        sscanf(st.c_str(), "%04d%02d%02d%d", &y, &m, &d, &no);
+        if (y == year && m == mon && d == day && max < no)
+            max = no;
+    }
+    if (max == -1)
+        max = 0;
+    ostringstream s;
+    s << setw(4) << year << setw(2) << setfill('0') << mon << setw(2) << setfill('0') << day << max;
+    return stol(s.str());
+}
+void display_items_for_purchase() {
+    static Store* store_obj = Store::get_instance_of_store();
+    bool prev = false, next = true;
+    vector<Item*> items = store_obj->getItems();
+    vector<Bill*> bills = store_obj->getBills();
+    unsigned int len_items = store_obj->getTotalItems();
+    unsigned int len_bills = store_obj->getTotalBills();    
+    unsigned int sc_no = 0;
+    map<string, int> map_items;
+    string doctor_name = "";
+    float total = 0.0f;
+    while (1) {
+        clear_console();
+        std::cout << std::endl << std::endl << setw(11) << 
+            "ITEM ID" << setw(20) << 
+            "ITEM NAME" << setw(11) << 
+            "ITEM PRICE" << setw(11) << 
+            "ITEM STOCK" << setw(15) << "ITEM EXP." << std::endl;
+        for (unsigned int i = sc_no; i < min(sc_no + item_list_display_size, len_items); i++) {
+            printItem(items[i], true);
+        }
+        std::cout << "Enter [p] for previous, [n] for next, [a] for adding item, [b] for finalizing bill, [q] to quit" << std::endl;
+        char c = linux_getch(1);
+        if (c == 'n' && next) {
+            if(sc_no + item_list_display_size == len_items - 1) {
+                sc_no += item_list_display_size;
+                prev = true;
+                next = false;
+            }
+            else if (sc_no + item_list_display_size > len_items - 1) {
+                // Do nothing
+            }
+            else {
+                sc_no += item_list_display_size;
+                prev = true;
+                next = true;
+            }
+        }
+        else if (c == 'p' && prev) {
+            if(sc_no - item_list_display_size == 0) {
+                sc_no += item_list_display_size;
+                prev = false;
+                next = true;
+            }
+            else if(sc_no - item_list_display_size < 0) {
+                // Do nothing
+            }
+            else {
+                sc_no -= item_list_display_size;
+                prev = true;
+                next = true;
+            }
+        }
+        else if (c == 'a') {
+            string purchase_item_no;
+            string pres, doctor;
+            unsigned int purchase_qty;
+            cout << "Enter item no.: ";
+            cin >> purchase_item_no;
+            cout << "Enter quantity: ";
+            cin >> purchase_qty;
+            cout << "Is there a prescription? (y / n): ";
+            cin >> pres;
+            if (pres == "y" || pres == "Y" || pres == "yes" || pres == "YES" || pres == "Yes") {
+                cout << "Enter Doctor name: ";
+                cin >> doctor;
+                doctor_name = doctor;
+            }
+            if (map_items.find(purchase_item_no) == map_items.end()) {
+                map_items.insert(make_pair(purchase_item_no, purchase_qty));
+            }
+            else {
+                map_items[purchase_item_no] += purchase_qty;
+            }
+            Item* item = getItem(purchase_item_no);
+            total += item->item_price * purchase_qty;
+            cout << "\033[1;32mItem added\033[0m" << endl;
+            cin.ignore();
+            cin.ignore(1, '\n');
+        }
+        else if (c == 'b') {
+            if (!map_items.empty()) {
+                long new_bill_no = last_bill_no_today() + 1;
+                Bill* new_bill = store_obj->generate_bill(map_items, new_bill_no, doctor_name, total);
+                store_obj->addNewBill(new_bill);
+                print_bill(new_bill);
+                cin.ignore();
+            }
+        }
+        else if (c == 'q')
+            return;
+    }
 }
 /* Main function */
 int main() {
@@ -436,7 +559,7 @@ int main() {
                 }
                 cout << "\n";
                 staff_instance = store_object->getStaff()[staff_pos_vec];
-                for(int i = 0; i < column_center - 18; i++) cout << " ";
+                for(int i = 0; i < column_center - 17; i++) cout << " ";
                 cout << "\033[1;32mSuccessfully logged in..Opening menu\033[0m" << endl;
                 staff_session_start = true;
                 sleep(3);
@@ -451,11 +574,14 @@ int main() {
                 // only if stock for that item is there.
                 // Enter the item ID for the item to purchase, and the quantity
                 // Take customer details: name, gender, age, doctor, prescription (y/n)
+                display_items_for_purchase();
+                clear_console();
             }
             else if(mode_selected_customer_menu == 2) {
-                display_bills();
-                cin.ignore();
-                cin.ignore();
+                if (display_bills()) {
+                    cin.ignore();
+                    cin.ignore();
+                }
                 clear_console();
             }
             else if(mode_selected_customer_menu == 3) {
@@ -487,7 +613,7 @@ int main() {
                 }
                 cout << "\n";
                 staff_instance = store_object->getStaff()[staff_pos_vec];
-                for(int i = 0; i < column_center - 18; i++) cout << " ";
+                for(int i = 0; i < column_center - 17; i++) cout << " ";
                 cout << "\033[1;32mSuccessfully logged in..Opening menu\033[0m" << endl;
                 staff_session_start = true;
                 sleep(3);
@@ -518,8 +644,8 @@ int main() {
                     }
                     if (choice != DEFAULT_MODE)
                         cin.ignore();
-                    clear_console();
                 }
+                clear_console();
             }
             else if(mode_selected_staff_menu == 3) {
                 clear_console();

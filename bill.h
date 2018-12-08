@@ -14,7 +14,7 @@ typedef struct BILL {
     std::string doctor_name;
     unsigned int item_id_no;
     std::string *item_id_list;
-    int *item_qty;
+    unsigned int *item_qty;
     float total_amount;
     
     BILL(long bno, std::string doctor, unsigned int items_no, float tot) {

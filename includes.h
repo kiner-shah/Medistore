@@ -22,6 +22,7 @@
 #include <vector>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <sstream>
 
 /* User-defined */
 #include "store.h"

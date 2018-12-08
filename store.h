@@ -18,6 +18,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 
 class Store {
     private:
@@ -66,7 +67,7 @@ class Store {
         }
         
     public:
-        Bill generate_bill();
+        Bill* generate_bill(std::map<std::string, int> items_qty_map, long, std::string, float);
         void display_items();
         bool modify_stock();
 //        bool validate_customer();
@@ -79,6 +80,7 @@ class Store {
         unsigned int getTotalItems() { return totalItems; }
         std::vector<Bill*> getBills() { return bills; }
         unsigned int getTotalBills() { return totalBills; }
+        void addNewBill(Bill* bill);
 //        static Store& get_instance_of_store() {       // Another alternative for Singleton
 //            static Store instance;
 //            return instance;

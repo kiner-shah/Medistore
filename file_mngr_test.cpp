@@ -1,5 +1,5 @@
 /* 
- * File:   file_mngr_test.h
+ * File:   file_mngr_test.cpp
  * Author: Kiner Shah
  *
  * Created on 30 June, 2018, 9:13 PM
