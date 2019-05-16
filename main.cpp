@@ -489,6 +489,36 @@ void display_items_for_purchase() {
             return;
     }
 }
+
+void do_staff_login() {
+    static Store* store_object = Store::get_instance_of_store();
+    if(staff_session_start == false) {
+        int count_staff_login_attempts = 0;
+        int staff_pos_vec = -1;
+        while((staff_pos_vec = store_object->validate_staff()) == -1) {
+            count_staff_login_attempts++;
+            if(count_staff_login_attempts >= 3) break;
+            cout << "\n";
+            for(int i = 0; i < column_center - 18; i++) cout << " ";
+            cout << "\033[1;31mCredentials didn't match, try again!\033[0m" << endl;
+            sleep(1);
+        }
+        if(count_staff_login_attempts >= 3) {
+            cout << "\n";
+            for(int i = 0; i < column_center - 34; i++) cout << " ";
+            cout << "\033[1;31mSorry, you don't seem to have valid credentials try login after sometime\033[0m" << endl;
+            sleep(5);
+            exit(0);
+        }
+        cout << "\n";
+        staff_instance = store_object->getStaff()[staff_pos_vec];
+        for(int i = 0; i < column_center - 17; i++) cout << " ";
+        cout << "\033[1;32mSuccessfully logged in..Opening menu\033[0m" << endl;
+        staff_session_start = true;
+        sleep(3);
+        clear_console();
+    }
+}
 /* Main function */
 int main() {
     /* Aligning the starting message to be exactly in the center of console window */
@@ -539,32 +569,7 @@ int main() {
             clear_console();
             /*-------------------------------------------------------------------------------------*/
             /*################################## LOGIN LOGIC ######################################*/
-            if(staff_session_start == false) {
-                int count_staff_login_attempts = 0;
-                int staff_pos_vec = -1;
-                while((staff_pos_vec = store_object->validate_staff()) == -1) {
-                    count_staff_login_attempts++;
-                    if(count_staff_login_attempts >= 3) break;
-                    cout << "\n";
-                    for(int i = 0; i < column_center - 18; i++) cout << " ";
-                    cout << "\033[1;31mCredentials didn't match, try again!\033[0m" << endl;
-                    sleep(1);
-                }
-                if(count_staff_login_attempts >= 3) {
-                    cout << "\n";
-                    for(int i = 0; i < column_center - 34; i++) cout << " ";
-                    cout << "\033[1;31mSorry, you don't seem to have valid credentials try login after sometime\033[0m" << endl;
-                    sleep(5);
-                    exit(0);
-                }
-                cout << "\n";
-                staff_instance = store_object->getStaff()[staff_pos_vec];
-                for(int i = 0; i < column_center - 17; i++) cout << " ";
-                cout << "\033[1;32mSuccessfully logged in..Opening menu\033[0m" << endl;
-                staff_session_start = true;
-                sleep(3);
-                clear_console();
-            }
+            do_staff_login();
 //            /*-------------------------------------------------------------------------------------*/
             display_menu(customer_menu_options, customer_menu_list, 3, 9, row_center - 1, column_center);
             menu_selection(customer_menu_options, customer_menu_list, 3, 9, row_center, column_center);
@@ -593,32 +598,7 @@ int main() {
     //        display_menu(staff_menu_options, 10, row_center - 1, column_center);
             clear_console();
             /*################################## LOGIN LOGIC ######################################*/
-            if(staff_session_start == false) {
-                int count_staff_login_attempts = 0;
-                int staff_pos_vec = -1;
-                while((staff_pos_vec = store_object->validate_staff()) == -1) {
-                    count_staff_login_attempts++;
-                    if(count_staff_login_attempts >= 3) break;
-                    cout << "\n";
-                    for(int i = 0; i < column_center - 18; i++) cout << " ";
-                    cout << "\033[1;31mCredentials didn't match, try again!\033[0m" << endl;
-                    sleep(1);
-                }
-                if(count_staff_login_attempts >= 3) {
-                    cout << "\n";
-                    for(int i = 0; i < column_center - 34; i++) cout << " ";
-                    cout << "\033[1;31mSorry, you don't seem to have valid credentials try login after sometime\033[0m" << endl;
-                    sleep(5);
-                    exit(0);
-                }
-                cout << "\n";
-                staff_instance = store_object->getStaff()[staff_pos_vec];
-                for(int i = 0; i < column_center - 17; i++) cout << " ";
-                cout << "\033[1;32mSuccessfully logged in..Opening menu\033[0m" << endl;
-                staff_session_start = true;
-                sleep(3);
-                clear_console();
-            }
+            do_staff_login();
             /*################################ LOGIN LOGIC END ####################################*/
             display_menu(staff_menu_options, staff_menu_list, 3, 9, row_center - 1, column_center);
             menu_selection(staff_menu_options, staff_menu_list, 3, 9, row_center, column_center);

@@ -354,7 +354,7 @@ bool Store::unloadItemsData() {
  * @return Boolean value indicating load success / failure
  */
 bool Store::loadBillData() {
-    bill_data = new FileMngr("bill_data.bin", READ_FILE);
+    bill_data = new FileMngr("bill_data.bin", READ_WRITE_FILE);
     if(bill_data->file_des == -1) return false;
     // File format: BillID,ItemID,ItemQty,ItemID,ItemQty,...,Total
     ssize_t bytes = 0;

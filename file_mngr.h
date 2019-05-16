@@ -11,7 +11,8 @@
 #include <cstring>
 typedef enum FileOpenModes {
     READ_FILE = 0,
-    WRITE_FILE = 1
+    WRITE_FILE = 1,
+    READ_WRITE_FILE = 2
 } file_open_modes;
 
 class FileMngr {

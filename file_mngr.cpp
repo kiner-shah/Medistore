@@ -14,10 +14,12 @@
  * @return  file descriptor
  */
 int FileMngr::openFile(char* fname, file_open_modes mode) {
-    if(mode == READ_FILE) 
+    if (mode == READ_FILE) 
         return open(fname, O_RDONLY);
-    else if(mode == WRITE_FILE)
+    else if (mode == WRITE_FILE)
         return open(fname, O_WRONLY);
+    else if (mode == READ_WRITE_FILE)
+        return open(fname, O_RDWR);
     return -1;
 }
 /**
