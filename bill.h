@@ -9,6 +9,8 @@
 #define	BILL_H
 
 #include "item.h"
+#include <sstream>
+
 typedef struct BILL {
     long bill_no;
     std::string doctor_name;
@@ -34,6 +36,15 @@ typedef struct BILL {
             delete[] item_qty;
             item_qty = NULL;
         }
+    }
+    std::string to_string() {
+        std::ostringstream os;
+        os << bill_no << ',' << doctor_name << ',' << item_id_no << ',';
+        for (unsigned int i = 0; i < item_id_no; i++) {
+            os << item_id_list[i] << ',' << item_qty[i] << ',';
+        }
+        os << total_amount;
+        return os.str();
     }
 } Bill;
 

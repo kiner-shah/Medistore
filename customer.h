@@ -11,32 +11,37 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <sstream>
 
 class Customer {
-private:
-    long *bill_nos;
-    unsigned int no_of_bill_nos;
-    std::string cAddress;
-    std::string cName;
-    std::string cGender;
-    
 public:
-    Customer(std::string name, std::string gender, std::string address, unsigned int count) : cAddress(address), 
-            cName(name), cGender(gender), bill_nos(NULL), no_of_bill_nos(count) {
+    Customer(std::string name, std::string date, long bill_no) : bill_no(bill_no), cName(name), bill_date_str(date) {
+        std::stringstream ss;
+        int day, mon, year;
+        char separator;
+        ss >> day >> separator >> mon >> separator >> year;
+        bill_date.tm_year = year - 1900;
+        bill_date.tm_mon = mon - 1;
+        bill_date.tm_mday = day;
     }
-    ~Customer() {
-        if(bill_nos != NULL) {
-            delete[] bill_nos;
-            bill_nos = NULL;
-        }
-        no_of_bill_nos = 0;
-    }
+    
     std::string getName() { return cName; }
-    std::string getGender() { return cGender; }
-    std::string getAddress() { return cAddress; }
-    void setBillNos(long *list) { bill_nos = list; }
+    long getBillNo() { return bill_no; }
+    std::string getBillDate() { return bill_date_str; }
     void purchaseItems();
     void checkTransactions();
+    std::string to_string() {
+        std::ostringstream os;
+        os << cName << ',' << bill_date_str << ',' << bill_no;
+        return os.str();
+    }
+    
+private:
+    struct tm bill_date;
+    long bill_no;
+    std::string cName;
+    std::string bill_date_str;
+    
 };
 
 #endif	/* CUSTOMER_H */

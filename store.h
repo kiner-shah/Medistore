@@ -52,6 +52,10 @@ class Store {
             totalItems = 0;
 //            item_transactions = NULL;
             totalBills = 0;
+            
+            if(!loadBillData()) {
+                std::cerr << "ERROR: loadBillData(): FAILED" << std::endl;
+            }
             if(!loadCustomerData()) {
                 std::cerr << "ERROR: loadCustomerData(): FAILED" << std::endl;
             }
@@ -61,13 +65,11 @@ class Store {
             if(!loadItemsData()) {
                 std::cerr << "ERROR: loadItemsData(): FAILED" << std::endl;
             }
-            if(!loadBillData()) {
-                std::cerr << "ERROR: loadBillData(): FAILED" << std::endl;
-            }
         }
         
     public:
         Bill* generate_bill(std::map<std::string, int> items_qty_map, long, std::string, float);
+        Customer* generate_customer(std::string name, long bill_no);
         void display_items();
         bool modify_stock();
 //        bool validate_customer();
@@ -81,6 +83,7 @@ class Store {
         std::vector<Bill*> getBills() { return bills; }
         unsigned int getTotalBills() { return totalBills; }
         void addNewBill(Bill* bill);
+        void addNewCustomer(Customer* customer);
 //        static Store& get_instance_of_store() {       // Another alternative for Singleton
 //            static Store instance;
 //            return instance;
@@ -92,6 +95,9 @@ class Store {
             return instance;
         }
         ~Store() {
+            if(!unloadBillData()) {
+                std::cerr << "ERROR: unloadBillData(): FAILED" << std::endl;
+            }
             if(!unloadCustomerData()) {
                 std::cerr << "ERROR: unloadCustomerData(): FAILED" << std::endl;
             }
@@ -100,9 +106,6 @@ class Store {
             }
             if(!unloadItemsData()) {
                 std::cerr << "ERROR: unloadItemsData(): FAILED" << std::endl;
-            }
-            if(!unloadBillData()) {
-                std::cerr << "ERROR: unloadBillData(): FAILED" << std::endl;
             }
         }
 };

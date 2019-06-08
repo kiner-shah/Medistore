@@ -26,8 +26,36 @@ Bill* Store::generate_bill(std::map<std::string, int> items_qty_map, long bill_n
     return new_bill;
 }
 void Store::addNewBill(Bill* bill) {
+    for (unsigned int i = 0; i < bill->item_id_no; i++) {
+        Item* it = NULL;
+        for (unsigned int j = 0; j < totalItems; j++) {
+            it = items[j];
+            if (it->item_id == bill->item_id_list[i]) break;
+        }
+        if (it != NULL) {
+            it->item_stock -= bill->item_qty[i];
+        }
+    }
     bills.push_back(bill);
     totalBills++;
+}
+Customer* Store::generate_customer(std::string name, long bill_no) {
+    struct tm* t;
+    time_t cur_time = time(NULL);
+    t = localtime(&cur_time);
+    int year = t->tm_year + 1900;
+    int mon = t->tm_mon + 1;
+    int day = t->tm_mday;
+    std::ostringstream os;
+    os << std::setfill('0') << std::setw(2) << day << '-' << 
+        std::setfill('0') << std::setw(2) << mon << '-' << year;
+    
+    Customer* cust = new Customer(name, os.str(), bill_no);
+    return cust;
+}
+void Store::addNewCustomer(Customer* customer) {
+    customers.push_back(customer);
+    totalCustomers++;
 }
 // TODO
 void Store::display_items() {
@@ -56,9 +84,10 @@ int Store::validate_staff() {
  * @return Boolean value indicating load success / failure
  */
 bool Store::loadCustomerData() {
-    customer_data = new FileMngr("customer_data.bin", READ_FILE);
+    customer_data = new FileMngr("customer_data.bin", READ_WRITE_FILE);
     if(customer_data->file_des == -1) return false;
-    // File format: CustomerName,CustomerGender,CustomerAddress,TransIdCount,Trans1,Trans2,..,TransN,Bill1,Bill2,..,BillN
+    while (customer_data->acquireRLock() == -1) { ; }
+    // File format: CustomerName,DateDDMMYYYY,BillNo
     ssize_t bytes = 0;
     int total_bytes = -1;
     unsigned int BUF_SIZE = 128;
@@ -82,21 +111,14 @@ bool Store::loadCustomerData() {
                 while(getline(iss, token, ',')) {
                     tokens.push_back(token);
                 }
-                std::cout << "Tokens: " << tokens.size() << std::endl;
+//                std::cout << "Tokens: " << tokens.size() << std::endl;
                 if(tokens.size() > 0) {
-//                    tokens[2] = tokens[2].substr(0, tokens[2].find_last_not_of("\n"));
-                    int bill_no_len = stoi(tokens[3]);
-                    Customer *temp = new Customer(tokens[0], tokens[1], tokens[2], bill_no_len);
-                    // TODO: Add reading bill numbers
-                    long *temp_bill_nos = new long[bill_no_len];
-                    for(int k = 0; k < bill_no_len; k++) {
-                        temp_bill_nos[k] = stol(tokens[4 + k]);
-                    }
-                    temp->setBillNos(temp_bill_nos);
+                    Customer *temp = new Customer(tokens[0], tokens[1], std::stol(tokens[2]));
                     customers.push_back(temp);
-//                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getGender() << std::endl;
+//                    std::cout << temp->getName() << " " << temp->getBillDate() << " " << temp->getBillNo() << std::endl;
                     totalCustomers++;
                 }
+                break;
             }
         }
         else {
@@ -121,17 +143,9 @@ bool Store::loadCustomerData() {
                 line = ""; total_bytes = -1;
                 memset(buf, '\0', BUF_SIZE);
                 if(tokens.size() > 0) {
-//                    tokens[2] = tokens[2].substr(0, tokens[2].find_last_not_of("\n"));
-                    int bill_no_len = stoi(tokens[3]);
-                    Customer *temp = new Customer(tokens[0], tokens[1], tokens[2], bill_no_len);
-                    // TODO: Add reading bill numbers
-                    long *temp_bill_nos = new long[bill_no_len];
-                    for(int k = 0; k < bill_no_len; k++) {
-                        temp_bill_nos[k] = stol(tokens[4 + k]);
-                    }
-                    temp->setBillNos(temp_bill_nos);
+                    Customer *temp = new Customer(tokens[0], tokens[1], std::stol(tokens[2]));
+//                    std::cout << temp->getName() << " " << temp->getBillDate() << " " << temp->getBillNo() << std::endl;
                     customers.push_back(temp);
-//                    std::cout << temp->getName() << " " << temp->getAddress() << " " << temp->getGender() << std::endl;
                     totalCustomers++;
                 }
             }
@@ -146,9 +160,23 @@ bool Store::loadCustomerData() {
  * @return unload success / failure
  */
 bool Store::unloadCustomerData() {
+    while (customer_data->acquireWLock() == -1) { ; }  
+    
+    if (lseek(customer_data->file_des, 0, SEEK_SET) == -1) {
+        std::cout << "ERROR lseek(): " << strerror(errno) << "(" << errno << ")\n";
+    }
+    
     for(unsigned int i = 0; i < totalCustomers; i++) {
-        delete customers[i];
-        customers[i] = NULL;
+        Customer* cust = customers[i];
+        std::string cust_str = cust->to_string();
+        cust_str += '\n';
+        if (write(customer_data->file_des, cust_str.c_str(), sizeof(char) * cust_str.size()) == -1) {
+            std::cout << "ERROR write(): " << strerror(errno) << "(" << errno << ")\n";
+        }
+        if (cust != NULL) {
+            delete cust;
+            cust = NULL;
+        }
 //        assert(customers[i] == NULL);
     }
     customers.clear();
@@ -165,6 +193,7 @@ bool Store::unloadCustomerData() {
 bool Store::loadStaffData() {
     staff_data = new FileMngr("staff_data.bin", READ_FILE);
     if(staff_data->file_des == -1) return false;
+    while (staff_data->acquireRLock() == -1) { ; }
     // File format: StaffID,StaffName,StaffGender,StaffAddress,StaffAge,StaffPassword
     ssize_t bytes = 0;
     int total_bytes = -1;
@@ -263,8 +292,9 @@ bool Store::unloadStaffData() {
  * @return Boolean value indicating load success / failure
  */
 bool Store::loadItemsData() {
-    items_data = new FileMngr("items_data.bin", READ_FILE);
+    items_data = new FileMngr("items_data.bin", READ_WRITE_FILE);
     if(items_data->file_des == -1) return false;
+    while (items_data->acquireRLock() == -1) { ; }
     // File format: ItemID,ItemName,ItemStock,ItemPrice,ItemExpiry(yyyy-mm-dd)
     ssize_t bytes = 0;
     int total_bytes = -1;
@@ -338,9 +368,23 @@ bool Store::loadItemsData() {
  * @return unload success / failure
  */
 bool Store::unloadItemsData() {
+    while (items_data->acquireWLock() == -1) { ; }  
+        
+    if (lseek(items_data->file_des, 0, SEEK_SET) == -1) {
+        std::cout << "ERROR lseek(): " << strerror(errno) << "(" << errno << ")\n";
+    }
+    
     for(unsigned int i = 0; i < totalItems; i++) {
-        delete items[i];
-        items[i] = NULL;
+        Item* item = items[i];
+        std::string item_str = item->to_string();
+        item_str += '\n';
+        if (write(items_data->file_des, item_str.c_str(), sizeof(char) * item_str.size()) == -1) {
+            std::cout << "ERROR write(): " << strerror(errno) << "(" << errno << ")\n";
+        }
+        if (item != NULL) {
+            delete item;
+            item = NULL;
+        }
 //        assert(staff[i] == NULL);
     }
     items.clear();
@@ -356,6 +400,7 @@ bool Store::unloadItemsData() {
 bool Store::loadBillData() {
     bill_data = new FileMngr("bill_data.bin", READ_WRITE_FILE);
     if(bill_data->file_des == -1) return false;
+    while (bill_data->acquireRLock() == -1) { ; }
     // File format: BillID,ItemID,ItemQty,ItemID,ItemQty,...,Total
     ssize_t bytes = 0;
     int total_bytes = -1;
@@ -450,9 +495,24 @@ bool Store::loadBillData() {
  * @return unload success / failure
  */
 bool Store::unloadBillData() {
+    while (bill_data->acquireWLock() == -1) { ; }  
+    
+    if (lseek(bill_data->file_des, 0, SEEK_SET) == -1) {
+        std::cout << "ERROR lseek(): " << strerror(errno) << "(" << errno << ")\n";
+    }
+    
     for(unsigned int i = 0; i < totalBills; i++) {
-        delete bills[i];
-        bills[i] = NULL;
+        Bill* b = bills[i];
+        std::string bill_str = b->to_string();
+        bill_str += '\n';
+        if (write(bill_data->file_des, bill_str.c_str(), sizeof(char) * bill_str.size()) == -1) {
+            std::cout << "ERROR write(): " << strerror(errno) << "(" << errno << ")\n";
+        }
+        
+        if (b != NULL) {
+            delete b;
+            b = NULL;
+        }
 //        assert(staff[i] == NULL);
     }
     bills.clear();

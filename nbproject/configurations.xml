@@ -20,6 +20,7 @@
                    displayName="Resource Files"
                    projectFiles="true">
       <itemPath>bill_data.bin</itemPath>
+      <itemPath>bill_data_bkup.bin</itemPath>
       <itemPath>customer_data.bin</itemPath>
       <itemPath>items_data.bin</itemPath>
       <itemPath>staff_data.bin</itemPath>
@@ -72,8 +73,16 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
         <ccTool>
           <standard>8</standard>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
           <commandLine>-ggdb</commandLine>
         </ccTool>
       </compileType>
@@ -86,6 +95,8 @@
       <item path="bill.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="bill_data.bin" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="bill_data_bkup.bin" ex="false" tool="3" flavor2="0">
       </item>
       <item path="customer.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -121,21 +132,6 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f2</output>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f3">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f3</output>
         </linkerTool>
       </folder>
       <item path="file_mngr.cpp" ex="false" tool="1" flavor2="0">
@@ -188,9 +184,15 @@
       <compileType>
         <cTool>
           <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -198,6 +200,9 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+        </linkerTool>
       </compileType>
       <item path="admin.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -208,6 +213,8 @@
       <item path="bill.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="bill_data.bin" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="bill_data_bkup.bin" ex="false" tool="3" flavor2="0">
       </item>
       <item path="customer.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -243,21 +250,6 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f2</output>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f3">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f3</output>
         </linkerTool>
       </folder>
       <item path="file_mngr.cpp" ex="false" tool="1" flavor2="0">

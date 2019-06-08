@@ -22,6 +22,12 @@ void initializeTerminalIOS(int echo_mode) {
     tcgetattr(0, &old_settings);
     new_settings = old_settings;
     
+    /*
+     * ICANON flag is for setting the canonical mode. In canonical mode, input is made available
+     * line by line, line editing is available and line limit is 4096 chars.
+     * If not set, the input is available immediately, no input processing is performed and line
+     * editing is disabled. No need to type line-delimiting character.
+     */
 //    new_settings.c_lflag &= ~ICANON;
 //    new_settings.c_lflag &= echo_mode ? ECHO : ~ECHO;
     new_settings.c_lflag &= ~(ICANON | ECHO | ECHOE);

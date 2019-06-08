@@ -88,7 +88,7 @@ bool Staff::modify_item(ModifyModes mode, std::string item_id) {
             std::string new_expiry;
             std::cout << "MODIFY EXPIRY" << std::endl;
             std::cin >> new_expiry;
-            target_item->convertToSTTM(new_expiry);
+            target_item->convertToTM(new_expiry);
         }
             break;
         default:

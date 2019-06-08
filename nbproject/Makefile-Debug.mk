@@ -70,11 +70,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${TESTDIR}/TestFiles/f3.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/medistore.exe
 
-${TESTDIR}/TestFiles/f3.exe: ${OBJECTFILES}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -o ${TESTDIR}/TestFiles/f3 ${OBJECTFILES} ${LDLIBSOPTIONS}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/medistore.exe: ${OBJECTFILES}
+	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/medistore ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/authentication.o: authentication.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -265,7 +265,7 @@ ${OBJECTDIR}/store_nomain.o: ${OBJECTDIR}/store.o store.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${TESTDIR}/TestFiles/f3.exe
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/medistore.exe
 
 # Subprojects
 .clean-subprojects:

@@ -8,9 +8,9 @@ CND_BUILDDIR=build
 CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=Cygwin-Windows
-CND_ARTIFACT_DIR_Debug=build/Debug/Cygwin-Windows/tests/TestFiles
-CND_ARTIFACT_NAME_Debug=f3
-CND_ARTIFACT_PATH_Debug=build/Debug/Cygwin-Windows/tests/TestFiles/f3
+CND_ARTIFACT_DIR_Debug=dist/Debug/Cygwin-Windows
+CND_ARTIFACT_NAME_Debug=medistore
+CND_ARTIFACT_PATH_Debug=dist/Debug/Cygwin-Windows/medistore
 CND_PACKAGE_DIR_Debug=dist/Debug/Cygwin-Windows/package
 CND_PACKAGE_NAME_Debug=medistore.tar
 CND_PACKAGE_PATH_Debug=dist/Debug/Cygwin-Windows/package/medistore.tar

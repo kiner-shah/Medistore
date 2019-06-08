@@ -8,9 +8,9 @@
  * Expected functionalities:
  * 1. Authentication of Staff.  --> done
  * 2. Showing item list (modify / check stock)  --> done
- * 3. Generation of Bill
+ * 3. Generation of Bill --> done
  * 4. Showing bills     --> done
- * 3. Storing of bills and updates.
+ * 3. Storing of bills and updates. --> perfect overwrite of files, read depends on extra newline
  */
 #include "includes.h"
 using namespace std;
@@ -405,7 +405,6 @@ void display_items_for_purchase() {
     unsigned int len_bills = store_obj->getTotalBills();    
     unsigned int sc_no = 0;
     map<string, int> map_items;
-    string doctor_name = "";
     float total = 0.0f;
     while (1) {
         clear_console();
@@ -451,19 +450,12 @@ void display_items_for_purchase() {
         }
         else if (c == 'a') {
             string purchase_item_no;
-            string pres, doctor;
             unsigned int purchase_qty;
             cout << "Enter item no.: ";
             cin >> purchase_item_no;
             cout << "Enter quantity: ";
             cin >> purchase_qty;
-            cout << "Is there a prescription? (y / n): ";
-            cin >> pres;
-            if (pres == "y" || pres == "Y" || pres == "yes" || pres == "YES" || pres == "Yes") {
-                cout << "Enter Doctor name: ";
-                cin >> doctor;
-                doctor_name = doctor;
-            }
+            
             if (map_items.find(purchase_item_no) == map_items.end()) {
                 map_items.insert(make_pair(purchase_item_no, purchase_qty));
             }
@@ -471,6 +463,10 @@ void display_items_for_purchase() {
                 map_items[purchase_item_no] += purchase_qty;
             }
             Item* item = getItem(purchase_item_no);
+            if (purchase_qty > item->item_stock) {
+                cout << "\033[1;31mStock is less, can't allow purchase\033[0m" << endl;
+                return;
+            }
             total += item->item_price * purchase_qty;
             cout << "\033[1;32mItem added\033[0m" << endl;
             cin.ignore();
@@ -479,9 +475,28 @@ void display_items_for_purchase() {
         else if (c == 'b') {
             if (!map_items.empty()) {
                 long new_bill_no = last_bill_no_today() + 1;
-                Bill* new_bill = store_obj->generate_bill(map_items, new_bill_no, doctor_name, total);
-                store_obj->addNewBill(new_bill);
-                print_bill(new_bill);
+                
+                string pres, doctor, cname, paid;
+                cout << "Is there a prescription? (y / n): ";
+                cin >> pres;
+                if (pres == "y" || pres == "Y" || pres == "yes" || pres == "YES" || pres == "Yes") {
+                    cout << "Enter Doctor name: ";
+                    cin >> doctor;
+                }
+                cout << "Customer name: ";
+                cin >> cname;
+                
+                Bill* new_bill = store_obj->generate_bill(map_items, new_bill_no, doctor, total);
+                Customer* new_cust = store_obj->generate_customer(cname, new_bill_no);
+                
+                cout << "Paid [y/n]: ";
+                cin >> paid;
+                if (paid == "y" || paid == "Y" || paid == "yes" || paid == "YES" || paid == "Yes") {
+                    store_obj->addNewBill(new_bill);
+                    store_obj->addNewCustomer(new_cust);
+                    print_bill(new_bill);
+                }
+                
                 cin.ignore();
             }
         }
@@ -527,12 +542,14 @@ int main() {
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);         // Input-Output Control (ioctl): TIOCGWINSZ (Terminal I/O Control Get Window Size)
     row_center = win.ws_row / 2;
     column_center = win.ws_col / 2;
+
     int no_of_spaces = column_center - 8;           // strlen(Welcome to Medistore) = 17. 17 / 2 = 8.
     display_in_center_row(row_center);
     for(int i = 0; i < no_of_spaces; i++) cout << " ";
     cout << "\033[1;32mWelcome to Medistore\033[0m";
     no_of_spaces = column_center - 12;
     cout << endl;
+    
     for(int i = 0; i < no_of_spaces + 1; i++) cout << " ";
     cout << "\033[1;33m[Press Enter to Continue]\033[0m";
     cin.ignore();
@@ -542,15 +559,19 @@ int main() {
     no_of_spaces = column_center - 5;
     for(int i = 0; i < no_of_spaces + 1; i++) cout << " ";
     cout << "Loading ...\n"; cout << endl; clear_console();
+    
     static Store* store_object = Store::get_instance_of_store();
+    
     int initial_menu_options = 1;
     int initial_menu_options_after_login = 1;
     int customer_menu_options = 1;
     int staff_menu_options = 1;
+    
     string initial_menu_list[3] = {" Customer ", " Staff    ", " Exit     "};
     string initial_menu_list_after_login[3] = {" Customer ", " Staff    ", " Logout   "};
     string customer_menu_list[3] = {" Purchase items   ", " View transaction "," Back             "};
     string staff_menu_list[3] = {" Check items stock ", " Modify items      ", " Back              "};
+    
 //    cout << initial_menu_option1 << " " << initial_menu_option2 << " " << initial_menu_option3 << endl;
     while(true) {
         int mode_selected_initial_menu;
@@ -564,16 +585,15 @@ int main() {
             menu_selection(initial_menu_options_after_login, initial_menu_list_after_login, 3, 5, row_center, column_center);
             mode_selected_initial_menu = initial_menu_options_after_login;
         }
+        
         /* User selected Customer */
         if(mode_selected_initial_menu == 1) {
             clear_console();
-            /*-------------------------------------------------------------------------------------*/
-            /*################################## LOGIN LOGIC ######################################*/
             do_staff_login();
-//            /*-------------------------------------------------------------------------------------*/
             display_menu(customer_menu_options, customer_menu_list, 3, 9, row_center - 1, column_center);
             menu_selection(customer_menu_options, customer_menu_list, 3, 9, row_center, column_center);
             int mode_selected_customer_menu = customer_menu_options;
+            
             if(mode_selected_customer_menu == 1) {
                 // Show item list to the customer (in parts of say 10 products): item name, item id, item price
                 // only if stock for that item is there.
@@ -597,12 +617,11 @@ int main() {
         else if(mode_selected_initial_menu == 2) {
     //        display_menu(staff_menu_options, 10, row_center - 1, column_center);
             clear_console();
-            /*################################## LOGIN LOGIC ######################################*/
             do_staff_login();
-            /*################################ LOGIN LOGIC END ####################################*/
             display_menu(staff_menu_options, staff_menu_list, 3, 9, row_center - 1, column_center);
             menu_selection(staff_menu_options, staff_menu_list, 3, 9, row_center, column_center);
             int mode_selected_staff_menu = staff_menu_options;
+            
             if(mode_selected_staff_menu == 1) {     // Check items stock
                 display_items_with_check_stock_privilege();
                 clear_console();

@@ -12,6 +12,7 @@
 #include <string>
 #include <cstring>
 #include <iostream>
+#include <sstream>
 
 typedef struct ITEM {
     std::string item_id;
@@ -19,7 +20,8 @@ typedef struct ITEM {
     unsigned int item_stock;
     float item_price;
     struct tm item_expiry;
-    void convertToSTTM(std::string date) {
+    std::string item_expiry_str;
+    void convertToTM(std::string date) {
         if(date != "NIL") {
             int temp_date_len = date.length(), count = 0, j = 0;
             char buf[1024]; memset(buf, '\0', 1024);
@@ -49,6 +51,7 @@ typedef struct ITEM {
             item_expiry.tm_mon--;
             if(count == 2) item_expiry.tm_mday = 1;
         }
+        item_expiry_str = date;
     }
     ITEM(std::string id, std::string name, unsigned int stock, float price, std::string date) {
         item_id = id;
@@ -66,7 +69,13 @@ typedef struct ITEM {
         item_expiry.tm_yday = 0;
         item_expiry.tm_year = 0;
         item_expiry.tm_zone = NULL;
-        convertToSTTM(date);
+        convertToTM(date);
+    }
+    std::string to_string() {
+        //ItemID,ItemName,ItemStock,ItemPrice,ItemExpiry(yyyy-mm-dd)
+        std::ostringstream os;
+        os << item_id << ',' << item_name << ',' << item_stock << ',' << item_price << ',' << item_expiry_str;
+        return os.str();
     }
 } Item;
 
